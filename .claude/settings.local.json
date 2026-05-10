@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git --version)",
+      "Bash(npm --version)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(python --version)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); $node = Get-Command node -ErrorAction SilentlyContinue; $npm = Get-Command npm -ErrorAction SilentlyContinue; Write-Output \"node: $\\($node.Source\\)\"; Write-Output \"npm: $\\($npm.Source\\)\")",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node --version; npm --version)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Read(//c/Users/shrey/AppData/Local/Temp/claude/C--Users-shrey-Documents-Gas-Tracker/bfc07771-07e6-404e-87cf-f8f5a9fd2178/tasks/**)",
+      "Bash(rm -f scraper/probe_locator.py scraper/probe_locator2.py scraper/probe_locator3.py scraper/probe_verify.py)",
+      "Bash(\"C:/Users/shrey/Documents/Gas Tracker/scraper/venv/Scripts/python.exe\" \"C:/Users/shrey/Documents/Gas Tracker/scraper/scrape.py\")",
+      "Bash(\"scraper/venv/Scripts/python.exe\" scraper/scrape.py)"
+    ]
+  }
+}

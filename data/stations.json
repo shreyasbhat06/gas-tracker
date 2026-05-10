@@ -1,0 +1,113 @@
+{
+  "updated": "2026-05-09T00:00:00+00:00",
+  "stations": [
+    {
+      "id": "morena",
+      "name": "Morena",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "401",
+        "url": "https://www.costco.com/w/-/ca/san-diego/401"
+      }
+    },
+    {
+      "id": "mission-valley",
+      "name": "Mission Valley",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "488",
+        "url": "https://www.costco.com/w/-/ca/san-diego/488"
+      }
+    },
+    {
+      "id": "carmel-mountain",
+      "name": "Carmel Mountain",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "452",
+        "url": "https://www.costco.com/w/-/ca/san-diego/452"
+      }
+    },
+    {
+      "id": "se-san-diego",
+      "name": "SE San Diego",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "483",
+        "url": "https://www.costco.com/w/-/ca/san-diego/483"
+      }
+    },
+    {
+      "id": "la-mesa",
+      "name": "La Mesa",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "469",
+        "url": "https://www.costco.com/w/-/ca/la-mesa/469"
+      }
+    },
+    {
+      "id": "poway",
+      "name": "Poway",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "775",
+        "url": "https://www.costco.com/w/-/ca/poway/775"
+      }
+    },
+    {
+      "id": "santee",
+      "name": "Santee",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "403",
+        "url": "https://www.costco.com/w/-/ca/santee/403"
+      }
+    },
+    {
+      "id": "rancho-del-rey",
+      "name": "Rancho Del Rey",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "460",
+        "url": "https://www.costco.com/w/-/ca/chula-vista/460"
+      }
+    },
+    {
+      "id": "chula-vista",
+      "name": "Chula Vista",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "781",
+        "url": "https://www.costco.com/w/-/ca/chula-vista/781"
+      }
+    },
+    {
+      "id": "san-marcos",
+      "name": "San Marcos",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "1080",
+        "url": "https://www.costco.com/w/-/ca/san-marcos/1080"
+      }
+    },
+    {
+      "id": "carlsbad",
+      "name": "Carlsbad",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "462",
+        "url": "https://www.costco.com/w/-/ca/carlsbad/462"
+      }
+    },
+    {
+      "id": "vista",
+      "name": "Vista",
+      "source": "costco",
+      "config": {
+        "warehouse_id": "124",
+        "url": "https://www.costco.com/w/-/ca/vista/124"
+      }
+    }
+  ]
+}

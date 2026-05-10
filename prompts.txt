@@ -1,0 +1,132 @@
+Phase 1: Project scaffold
+Paste:
+
+Set up this folder as a Vite + React + TypeScript project with Tailwind CSS configured for dark mode by default. Use src/ for the React app. Also create a scraper/ folder for a Python scraper, and a data/ folder that will hold prices.json (start it as {"stations": []}). Add a proper .gitignore for both Node and Python (node_modules, dist, pycache, venv, etc). Install dependencies: react, react-dom, recharts, lucide-react, date-fns. Configure Vite so npm run build outputs to dist/ and the base path is /gas-tracker/ (for GitHub Pages later). After setup, run npm run dev to confirm it starts cleanly, then stop the dev server.
+
+Phase 2: The Costco scraper
+Paste this (it includes the auto-discovery feature so you don't hardcode URLs):
+
+In scraper/scrape.py, write a Python scraper for Costco gas prices in San Diego County.
+Logic:
+
+Maintain a data/stations.json file with discovered Costco gas stations. If it's missing or older than 30 days, rediscover by fetching the Costco warehouse locator and finding warehouses with zip codes starting "92" (San Diego County) that have gas stations on their detail pages.
+For each station, fetch the warehouse page and parse regular and premium gas prices from the "Gas Station" section. The price is shown like "$5.79⁹" (the superscript 9 = 9/10 of a cent, so parse as 5.799).
+Read data/prices.json, append a new record {"timestamp": ISO8601, "regular": 5.799, "premium": 6.199} to that station's history. Keep only the last 90 days of history per station to keep the file small.
+Write back to data/prices.json.
+
+Pre-seed data/stations.json with these confirmed San Diego Costco locations to start, so we don't depend on discovery on first run:
+
+Morena: https://www.costco.com/warehouse-locations/morena-san-diego-ca-401.html
+Mission Valley: https://www.costco.com/warehouse-locations/-488.html
+Carmel Mountain: https://www.costco.com/warehouse-locations/carmel-mountain-san-diego-ca-452.html
+SE San Diego: https://www.costco.com/warehouse-locations/se-san-diego-san-diego-ca-483.html
+
+Use requests + BeautifulSoup. Set a real User-Agent header. Handle each station independently so one failure doesn't kill the run. Log clearly which stations succeeded and which failed. Include a requirements.txt with pinned versions.
+After writing the code, set up a Python venv, install requirements, and run the scraper once. Show me the resulting data/prices.json. Verify the prices look correct before stopping.
+
+
+Note: If discovery fails or some URLs are wrong, Claude Code will tell you and ask. Just have it skip the broken ones for now — you can add Poway, San Marcos, Santee, Chula Vista manually later by visiting costco.com/warehouse-locations, searching San Diego, and pasting URLs.
+
+Phase 3: Schedule on GitHub Actions
+Paste:
+
+Create .github/workflows/scrape.yml to run the scraper twice daily on a schedule.
+Requirements:
+
+Cron: 0 14,2 * * * (this is 7am and 7pm Pacific time)
+Also support manual trigger via workflow_dispatch
+Use ubuntu-latest, Python 3.12, install from scraper/requirements.txt, run python scraper/scrape.py
+After running, commit and push any changes to data/prices.json and data/stations.json back to the repo with message "chore: update prices [skip ci]"
+Use the default GITHUB_TOKEN with proper write permissions in the workflow's permissions block
+
+Then walk me through, step by step with what to click, how to enable Actions in my GitHub repo settings if it's a brand new repo. Tell me how to manually trigger the workflow once to confirm it runs end-to-end before I trust the schedule.
+
+Phase 4: The dashboard UI
+Paste:
+
+Build the main dashboard in src/App.tsx (replace the default Vite content). Two tabs at the top: "Prices" and "Fuel Log".
+Prices tab
+
+Big hero card at top: today's cheapest Costco for premium, with station name, price ($X.XX/gal), distance text "in [neighborhood]", and a tap-to-open Apple Maps directions button (use maps://?daddr=... URL scheme — works on iPhone)
+Toggle: "Premium / Regular" — switches what the rest of the page shows
+Bar chart comparing all stations' current prices (Recharts BarChart, sorted ascending)
+Line chart: 30-day price trend with one colored line per station, legend at top, smooth curves
+"Last updated" timestamp at bottom showing when the scraper last ran (use the most recent timestamp in prices.json)
+Fetches data from ./data/prices.json (works because Vite serves it from public/, copy data/ to public/data/ on build via a small Vite plugin or postbuild script)
+
+Fuel Log tab
+
+Big primary "Log fill-up" button → opens a modal:
+
+Date (default today)
+Odometer reading (miles)
+Fuel level after fill (% — assume filled to 100% as default)
+Gallons pumped
+Price per gallon
+Station: dropdown of Costco stations from prices.json + "Other" with a free-text field
+
+
+Stat cards row:
+
+Last MPG (calculated from miles between last two fill-ups ÷ gallons of last fill-up)
+30-day average MPG
+Total spent this month
+Miles driven this month
+Cost per mile (lifetime)
+
+
+Recent fill-ups list, swipe-left or trash icon to delete
+Storage: localStorage with key "fuelLog". Add Export JSON and Import JSON buttons for backup
+
+Design
+
+Dark mode default, very dark gray bg (#0a0a0a), card bg (#171717)
+Subtle blue/purple gradient accent on the hero card (BMW M-color vibe)
+Generous whitespace, rounded-2xl cards, soft shadows
+lucide-react icons (Fuel, TrendingDown, MapPin, Plus, etc.)
+Mobile-first; works great at 390px wide (iPhone width)
+Clean typography: system font stack, comfortable line heights
+It should feel like a premium iOS-style app, not a generic dashboard
+
+Build it as a single App.tsx with components in src/components/. Run npm run dev and open the URL it gives me, so I can preview before we deploy.
+
+Phase 5: Deploy to GitHub Pages
+Paste:
+
+Set up GitHub Pages deployment.
+Create .github/workflows/deploy.yml that:
+
+Triggers on every push to main
+Sets up Node 20, runs npm ci, npm run build
+Deploys the dist/ folder to GitHub Pages using the official actions/deploy-pages action
+Has correct permissions for Pages deployment
+
+Then walk me through enabling Pages in the repo Settings (Settings → Pages → Source: GitHub Actions). Tell me the exact final URL my app will be at, and how long it takes to go live after I push.
+After everything is set up, do: git add ., git commit -m "Initial gas tracker", git push origin main. Watch for the deploy workflow to succeed and confirm the URL is live.
+
+
+Part 5: Put it on your iPhone
+Once your app is live at https://YOUR_USERNAME.github.io/gas-tracker/:
+
+Open it in Safari on your iPhone (not Chrome — needed for proper home-screen install)
+Tap the Share button (square with arrow)
+Scroll down → Add to Home Screen
+Name it "Gas" → Add
+
+Now it has its own icon on your home screen and opens fullscreen like a native app.
+
+Part 6: Polish (after it's working)
+Iterate by re-opening Claude Code in your project folder and pasting prompts like:
+
+Add a "savings calculator" card on the prices tab: based on a 15-gallon fill, how much I save filling up at the cheapest premium station vs the most expensive today.
+
+
+Add a notification banner on app open that says "Fill up! Today's cheapest premium is at [station] for $X.XX/gal" — but only show it if I haven't logged a fill-up in the last 7 days.
+
+
+Add a price-trend indicator next to each station: a small green/red arrow showing whether the price went up or down vs 7 days ago.
+
+
+The scraper failed on the Mission Valley URL. Here's the page HTML: [paste it]. Fix the parser.
+
+After each change: git add . && git commit -m "..." && git push. Auto-deploys in ~2 minutes.

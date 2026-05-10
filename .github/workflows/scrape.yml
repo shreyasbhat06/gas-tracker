@@ -1,0 +1,48 @@
+name: Scrape Gas Prices
+
+on:
+  schedule:
+    # 14:00 and 02:00 UTC = 7am and 7pm Pacific Daylight Time.
+    # During Pacific Standard Time (Nov–Mar) this fires at 6am and 6pm
+    # local — GitHub Actions cron does not support timezones.
+    - cron: '0 14,2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-prices
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scraper/requirements.txt
+
+      - name: Run scraper
+        run: python scraper/scrape.py
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/prices.json data/stations.json)" ]; then
+            git add data/prices.json data/stations.json
+            git commit -m "chore: update prices [skip ci]"
+            git push
+          else
+            echo "No data changes to commit."
+          fi

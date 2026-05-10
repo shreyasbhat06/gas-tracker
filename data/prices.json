@@ -1,0 +1,168 @@
+{
+  "stations": [
+    {
+      "id": "morena",
+      "name": "Morena",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:05:49+00:00",
+          "regular": 5.699,
+          "premium": 6.079
+        },
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.699,
+          "premium": 6.079
+        }
+      ]
+    },
+    {
+      "id": "mission-valley",
+      "name": "Mission Valley",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:05:49+00:00",
+          "regular": 5.599,
+          "premium": 6.099
+        },
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.599,
+          "premium": 6.099
+        }
+      ]
+    },
+    {
+      "id": "carmel-mountain",
+      "name": "Carmel Mountain",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:05:49+00:00",
+          "regular": 5.599,
+          "premium": 6.099
+        },
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.599,
+          "premium": 6.099
+        }
+      ]
+    },
+    {
+      "id": "se-san-diego",
+      "name": "SE San Diego",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:05:49+00:00",
+          "regular": 5.699,
+          "premium": 5.999
+        },
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.699,
+          "premium": 5.999
+        }
+      ]
+    },
+    {
+      "id": "la-mesa",
+      "name": "La Mesa",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.499,
+          "premium": 5.999
+        }
+      ]
+    },
+    {
+      "id": "poway",
+      "name": "Poway",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.599,
+          "premium": 6.299
+        }
+      ]
+    },
+    {
+      "id": "santee",
+      "name": "Santee",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.799,
+          "premium": 6.099
+        }
+      ]
+    },
+    {
+      "id": "rancho-del-rey",
+      "name": "Rancho Del Rey",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.799,
+          "premium": 6.199
+        }
+      ]
+    },
+    {
+      "id": "chula-vista",
+      "name": "Chula Vista",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.779,
+          "premium": 6.199
+        }
+      ]
+    },
+    {
+      "id": "san-marcos",
+      "name": "San Marcos",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.699,
+          "premium": 6.099
+        }
+      ]
+    },
+    {
+      "id": "carlsbad",
+      "name": "Carlsbad",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.989,
+          "premium": 6.299
+        }
+      ]
+    },
+    {
+      "id": "vista",
+      "name": "Vista",
+      "source": "costco",
+      "history": [
+        {
+          "timestamp": "2026-05-10T03:17:15+00:00",
+          "regular": 5.899,
+          "premium": 6.139
+        }
+      ]
+    }
+  ]
+}
