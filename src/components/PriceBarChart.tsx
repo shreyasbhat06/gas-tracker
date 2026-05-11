@@ -81,7 +81,7 @@ export function PriceBarChart({ stations, fuel }: PriceBarChartProps) {
             <LabelList
               dataKey="price"
               position="right"
-              formatter={(value) =>
+              formatter={(value: number | string | undefined) =>
                 typeof value === 'number' ? `$${value.toFixed(3)}` : ''
               }
               fill="#d4d4d4"
