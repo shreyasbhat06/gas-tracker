@@ -16,15 +16,67 @@
   }
 
   /* iOS Safari renders date/time inputs with native chrome that ignores
-     padding and ends up significantly taller than text inputs. Normalize
-     so grid rows stay consistent. */
+     padding and ends up taller than text inputs. Normalize the outer
+     metrics. (The h-11 in inputCls then locks it to 44px exactly.) */
   input[type='date'],
   input[type='time'],
   input[type='datetime-local'] {
     -webkit-appearance: none;
     appearance: none;
-    min-height: 2.625rem;
-    line-height: 1.25rem;
+    min-height: 2.75rem;
+    text-align: left;
+  }
+
+  /* The actual date/time *value* text on iOS Safari lives in a
+     shadow-DOM child node that doesn't inherit text-align or margins
+     from the outer input — center-aligned and slightly offset by default.
+     Force it flush-left so it matches the placeholder of a text input. */
+  input[type='date']::-webkit-date-and-time-value,
+  input[type='time']::-webkit-date-and-time-value,
+  input[type='datetime-local']::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+  }
+
+  /* The native calendar-picker-indicator reserves space even when it
+     looks empty. Hide it — tapping anywhere in the field still opens
+     the iOS date picker. */
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='time']::-webkit-calendar-picker-indicator,
+  input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    width: 0;
+    padding: 0;
+  }
+}
+
+@layer utilities {
+  /* iOS-style bottom-sheet entrance */
+  .animate-modal-sheet {
+    animation: modal-sheet-enter 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+  .animate-modal-backdrop {
+    animation: modal-backdrop-enter 0.2s ease-out both;
+  }
+}
+
+@keyframes modal-sheet-enter {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modal-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

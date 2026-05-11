@@ -119,11 +119,11 @@ export function LogFillUpModal({
     lastOdometer != null ? `> ${lastOdometer.toLocaleString()}` : '32450'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-modal-backdrop">
       <div className="absolute inset-0" onClick={onClose} aria-hidden />
       <form
         onSubmit={submit}
-        className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl p-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] shadow-2xl"
+        className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl p-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] shadow-2xl animate-modal-sheet"
       >
         <div
           aria-hidden
@@ -267,8 +267,11 @@ function autoFillPrice(station: Station | undefined): string {
   return price != null ? price.toFixed(3) : ''
 }
 
+// Explicit h-11 (= 44px, Apple HIG minimum tap target) keeps every input
+// the same height regardless of type. Without it, iOS Safari sizes date,
+// select, and text inputs slightly differently and the grid drifts.
 const inputCls =
-  'w-full px-3 py-2.5 rounded-xl bg-neutral-800 border border-neutral-700 text-white text-base placeholder-neutral-500 focus:outline-none focus:border-blue-500'
+  'block w-full h-11 px-3 rounded-xl bg-neutral-800 border border-neutral-700 text-white text-base placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-colors'
 
 interface PrefixedInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
@@ -280,14 +283,15 @@ interface PrefixedInputProps
 function PrefixedInput({ prefix, value, onChange, ...rest }: PrefixedInputProps) {
   return (
     <div className="relative">
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-base pointer-events-none">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-base pointer-events-none select-none">
         {prefix}
       </span>
       <input
         {...rest}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={inputCls + ' pl-7'}
+        // pl-6 puts typed text ~4px past the $ sign — tight but never overlapping.
+        className={inputCls + ' pl-6'}
       />
     </div>
   )
