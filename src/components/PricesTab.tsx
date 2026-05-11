@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { FuelType, PricesData } from '../types'
-import { cheapest, formatLastUpdated, latestTimestamp } from '../utils/prices'
+import { cheapest, formatLastUpdated, isFresh, latestTimestamp } from '../utils/prices'
 import { loadFavoriteId, saveFavoriteId } from '../utils/favorite'
 import { HeroCard } from './HeroCard'
 import { CheapestCard } from './CheapestCard'
@@ -40,11 +40,12 @@ export function PricesTab({ data }: { data: PricesData }) {
 
       <FuelToggle value={fuel} onChange={setFuel} />
 
-      <PriceBarChart stations={stations} fuel={fuel} />
-      <PriceTrendChart stations={stations} fuel={fuel} />
+      <PriceBarChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
+      <PriceTrendChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
 
-      <p className="text-center text-xs text-neutral-500">
-        Last updated {formatLastUpdated(updated)}
+      <p className="text-center text-xs text-neutral-500 inline-flex items-center justify-center gap-1.5 self-center">
+        <LiveDot fresh={isFresh(updated)} />
+        Updated {formatLastUpdated(updated)}
       </p>
 
       <StationPickerSheet
@@ -56,6 +57,21 @@ export function PricesTab({ data }: { data: PricesData }) {
         onSelect={setFavId}
       />
     </div>
+  )
+}
+
+function LiveDot({ fresh }: { fresh: boolean }) {
+  const color = fresh ? 'bg-emerald-500' : 'bg-neutral-600'
+  return (
+    <span className="relative flex w-1.5 h-1.5">
+      {fresh && (
+        <span
+          aria-hidden
+          className={`absolute inset-0 rounded-full ${color} animate-ping opacity-60`}
+        />
+      )}
+      <span className={`relative w-1.5 h-1.5 rounded-full ${color}`} />
+    </span>
   )
 }
 

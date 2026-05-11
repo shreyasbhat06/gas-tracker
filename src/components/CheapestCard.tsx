@@ -29,7 +29,7 @@ export function CheapestCard({ station, fuel, isFavorite = false }: CheapestCard
   }
 
   return (
-    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800">
+    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-900 border border-white/[0.04]">
       <div className="w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-400 grid place-items-center shrink-0">
         <TrendingDown className="w-4 h-4" />
       </div>

@@ -33,6 +33,10 @@ export function StationPickerSheet({
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="absolute inset-0" onClick={onClose} aria-hidden />
       <div className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[80vh]">
+        <div
+          aria-hidden
+          className="sm:hidden mx-auto mt-2.5 w-10 h-1.5 rounded-full bg-neutral-700"
+        />
         <div className="flex items-center justify-between p-5 pb-3">
           <h3 className="text-lg font-semibold">Choose home station</h3>
           <button

@@ -44,7 +44,7 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
           <button
             type="button"
             onClick={onChangeStation}
-            className="inline-flex items-center gap-1 text-xs text-neutral-400 hover:text-white px-2 py-1 rounded-lg hover:bg-white/5"
+            className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 active:bg-white/15 backdrop-blur-sm transition-colors"
           >
             Change
             <ChevronDown className="w-3.5 h-3.5" />
@@ -52,7 +52,7 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
         </div>
 
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-5xl font-semibold tabular-nums tracking-tight">
+          <span className="text-[3.25rem] font-semibold tabular-nums tracking-tighter leading-none">
             {formatPrice(price)}
           </span>
           <span className="text-neutral-400 text-sm">/ gal</span>

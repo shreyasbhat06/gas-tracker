@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import { Download, Plus, Upload } from 'lucide-react'
+import {
+  CalendarDays,
+  DollarSign,
+  Download,
+  Gauge,
+  Plus,
+  Route,
+  Trophy,
+  Upload,
+  Zap,
+} from 'lucide-react'
 import type { FuelLogEntry, Station } from '../types'
 import {
   addEntry,
@@ -64,26 +74,32 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
 
       <div className="grid grid-cols-2 gap-3">
         <StatCard
+          icon={Zap}
           label="Last MPG"
           value={stats.lastMpg != null ? stats.lastMpg.toFixed(1) : '—'}
         />
         <StatCard
+          icon={Gauge}
           label="30-day avg MPG"
           value={stats.avgMpg30d != null ? stats.avgMpg30d.toFixed(1) : '—'}
         />
         <StatCard
+          icon={CalendarDays}
           label="Lifetime MPG"
           value={stats.lifetimeMpg != null ? stats.lifetimeMpg.toFixed(1) : '—'}
         />
         <StatCard
+          icon={Trophy}
           label="Best MPG"
           value={stats.bestMpg != null ? stats.bestMpg.toFixed(1) : '—'}
         />
         <StatCard
+          icon={DollarSign}
           label="Spent this month"
           value={`$${stats.spentThisMonth.toFixed(2)}`}
         />
         <StatCard
+          icon={Route}
           label="Miles this month"
           value={stats.milesThisMonth.toLocaleString()}
         />

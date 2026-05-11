@@ -9,7 +9,7 @@ interface FillUpListProps {
 export function FillUpList({ entries, onDelete }: FillUpListProps) {
   if (!entries.length) {
     return (
-      <div className="rounded-2xl bg-neutral-900 p-6 text-center text-sm text-neutral-400">
+      <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] p-6 text-center text-sm text-neutral-400">
         No fill-ups yet. Tap “Log fill-up” to add your first one.
       </div>
     )
@@ -19,7 +19,7 @@ export function FillUpList({ entries, onDelete }: FillUpListProps) {
   const reversed = [...entries].reverse()
 
   return (
-    <div className="rounded-2xl bg-neutral-900 overflow-hidden divide-y divide-neutral-800">
+    <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] overflow-hidden divide-y divide-neutral-800">
       {reversed.map((e) => (
         <FillUpRow key={e.id} entry={e} onDelete={onDelete} />
       ))}

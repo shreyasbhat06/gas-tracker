@@ -24,6 +24,41 @@ export function latestTimestamp(stations: Station[]): string | null {
   return latest
 }
 
+export interface PriceChange {
+  current: number
+  previous: number
+  delta: number
+}
+
+/**
+ * Latest price vs. the price ~`daysAgo` ago, choosing the closest history
+ * entry within `toleranceDays`. Returns null if either endpoint is missing.
+ * Positive `delta` = price went up; negative = went down (what we want).
+ */
+export function priceChangeVs(
+  station: Station,
+  fuel: FuelType,
+  daysAgo = 7,
+  toleranceDays = 3,
+): PriceChange | null {
+  const current = latestPriceFor(station, fuel)
+  if (current == null) return null
+
+  const targetMs = Date.now() - daysAgo * 24 * 60 * 60 * 1000
+  const toleranceMs = toleranceDays * 24 * 60 * 60 * 1000
+
+  let best: { gap: number; price: number } | null = null
+  for (const h of station.history) {
+    const v = h[fuel]
+    if (typeof v !== 'number') continue
+    const gap = Math.abs(new Date(h.timestamp).getTime() - targetMs)
+    if (gap > toleranceMs) continue
+    if (!best || gap < best.gap) best = { gap, price: v }
+  }
+  if (!best) return null
+  return { current, previous: best.price, delta: current - best.price }
+}
+
 export function cheapest(stations: Station[], fuel: FuelType): Station | null {
   let best: { station: Station; price: number } | null = null
   for (const s of stations) {
@@ -71,12 +106,19 @@ export function shortDate(iso: string): string {
 
 export function formatLastUpdated(iso: string | null): string {
   if (!iso) return 'never'
-  const d = new Date(iso)
-  return d.toLocaleString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  })
+  const diffMs = Date.now() - new Date(iso).getTime()
+  if (diffMs < 60_000) return 'just now'
+  const mins = Math.floor(diffMs / 60_000)
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days < 7) return `${days}d ago`
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+/** True if the timestamp is recent enough that we can call the data "live". */
+export function isFresh(iso: string | null, withinHours = 14): boolean {
+  if (!iso) return false
+  return Date.now() - new Date(iso).getTime() < withinHours * 60 * 60 * 1000
 }

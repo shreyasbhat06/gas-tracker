@@ -73,6 +73,10 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
         onSubmit={submit}
         className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl p-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] shadow-2xl"
       >
+        <div
+          aria-hidden
+          className="sm:hidden mx-auto mb-3 w-10 h-1.5 rounded-full bg-neutral-700"
+        />
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Log fill-up</h3>
           <button

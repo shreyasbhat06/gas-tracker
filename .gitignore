@@ -7,6 +7,9 @@ dist-ssr/
 # Auto-mirrored from data/ by vite.config.ts
 public/data/
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Claude Code workspace (local-machine dev aids)
 .claude/
 

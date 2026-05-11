@@ -17,7 +17,7 @@ export function MpgTrendChart({ entries }: { entries: FuelLogEntry[] }) {
 
   if (points.length < 1) {
     return (
-      <div className="rounded-2xl bg-neutral-900 p-6 text-center text-sm text-neutral-500">
+      <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] p-6 text-center text-sm text-neutral-500">
         Log at least two full fill-ups to see your MPG trend.
       </div>
     )
@@ -30,7 +30,7 @@ export function MpgTrendChart({ entries }: { entries: FuelLogEntry[] }) {
   const avg = data.reduce((a, b) => a + b.mpg, 0) / data.length
 
   return (
-    <div className="rounded-2xl bg-neutral-900 p-4">
+    <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] p-4">
       <div className="mb-3 px-2 flex items-baseline justify-between">
         <h2 className="text-sm font-semibold text-neutral-200">MPG trend</h2>
         <span className="text-xs text-neutral-500 tabular-nums">

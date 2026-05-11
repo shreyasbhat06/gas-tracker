@@ -60,8 +60,11 @@ function App() {
 
 function LoadingBlock() {
   return (
-    <div className="rounded-2xl bg-neutral-900 p-6 text-neutral-400 text-sm">
-      Loading prices…
+    <div className="flex flex-col gap-4 animate-pulse">
+      <div className="h-44 rounded-3xl bg-neutral-900" />
+      <div className="h-16 rounded-2xl bg-neutral-900" />
+      <div className="h-10 rounded-2xl bg-neutral-900" />
+      <div className="h-72 rounded-2xl bg-neutral-900" />
     </div>
   )
 }
