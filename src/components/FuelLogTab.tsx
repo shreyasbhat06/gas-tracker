@@ -12,13 +12,13 @@ import {
 } from 'lucide-react'
 import type { FuelLogEntry, Station } from '../types'
 import {
-  addEntry,
   computeStats,
   deleteEntry,
   downloadJson,
   loadFuelLog,
   parseImport,
   saveFuelLog,
+  upsertEntry,
 } from '../utils/fuelLog'
 import { LogFillUpModal } from './LogFillUpModal'
 import { StatCard } from './StatCard'
@@ -28,6 +28,7 @@ import { MpgTrendChart } from './MpgTrendChart'
 export function FuelLogTab({ stations }: { stations: Station[] }) {
   const [entries, setEntries] = useState<FuelLogEntry[]>([])
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<FuelLogEntry | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -35,10 +36,32 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
   }, [])
 
   const stats = computeStats(entries)
+  // Most recent odometer reading; used as placeholder hint for new entries.
+  const lastOdometer =
+    entries.length > 0
+      ? Math.max(...entries.map((e) => e.odometer))
+      : null
+
+  function openForCreate() {
+    setEditing(null)
+    setOpen(true)
+  }
+
+  function openForEdit(entry: FuelLogEntry) {
+    setEditing(entry)
+    setOpen(true)
+  }
+
+  function handleClose() {
+    setOpen(false)
+    // Defer clearing `editing` so the modal's exit doesn't flicker between
+    // edit/create chrome on the way out.
+    setTimeout(() => setEditing(null), 200)
+  }
 
   function handleSubmit(entry: FuelLogEntry) {
-    setEntries(addEntry(entry))
-    setOpen(false)
+    setEntries(upsertEntry(entry))
+    handleClose()
   }
 
   function handleDelete(id: string) {
@@ -65,7 +88,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
     <div className="flex flex-col gap-5">
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openForCreate}
         className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white font-semibold shadow-lg shadow-blue-500/10 transition-colors"
       >
         <Plus className="w-5 h-5" />
@@ -128,7 +151,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
             />
           </div>
         </div>
-        <FillUpList entries={entries} onDelete={handleDelete} />
+        <FillUpList entries={entries} onDelete={handleDelete} onEdit={openForEdit} />
       </div>
 
       <MpgTrendChart entries={entries} />
@@ -136,7 +159,9 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
       <LogFillUpModal
         open={open}
         stations={stations}
-        onClose={() => setOpen(false)}
+        entry={editing}
+        lastOdometer={lastOdometer}
+        onClose={handleClose}
         onSubmit={handleSubmit}
       />
     </div>

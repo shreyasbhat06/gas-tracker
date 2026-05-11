@@ -19,10 +19,24 @@ export function saveFuelLog(entries: FuelLogEntry[]): void {
   localStorage.setItem(KEY, JSON.stringify(entries))
 }
 
-export function addEntry(entry: FuelLogEntry): FuelLogEntry[] {
-  const list = [...loadFuelLog(), entry].sort(byDateAsc)
+/**
+ * Add a new entry OR replace an existing one (matched by `id`).
+ * Lets the modal use a single submit handler for create + edit flows.
+ */
+export function upsertEntry(entry: FuelLogEntry): FuelLogEntry[] {
+  const existing = loadFuelLog()
+  const idx = existing.findIndex((e) => e.id === entry.id)
+  const list = idx >= 0
+    ? existing.map((e, i) => (i === idx ? entry : e))
+    : [...existing, entry]
+  list.sort(byDateAsc)
   saveFuelLog(list)
   return list
+}
+
+/** @deprecated kept for any older callers; new code should use upsertEntry. */
+export function addEntry(entry: FuelLogEntry): FuelLogEntry[] {
+  return upsertEntry(entry)
 }
 
 export function deleteEntry(id: string): FuelLogEntry[] {

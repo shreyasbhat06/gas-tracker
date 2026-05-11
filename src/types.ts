@@ -29,6 +29,11 @@ export interface FuelLogEntry {
   /** Standard Fuelly-style model: MPG is only computed at full fills,
    *  with partial-fill gallons accumulating into the next full fill. */
   filledToFull: boolean
+  /** Total amount paid at the pump. The user enters this directly (from
+   *  the receipt/credit-card statement); gallons is derived as
+   *  totalCost / pricePerGallon. Optional for backward compat with
+   *  pre-2026-05 entries that only stored gallons. */
+  totalCost?: number
   /** Optional metadata — not used in MPG calc, just kept as a note. */
   fuelLevelAfter?: number
 }

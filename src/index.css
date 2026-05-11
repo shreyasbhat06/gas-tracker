@@ -14,6 +14,18 @@
   body {
     overscroll-behavior-y: none;
   }
+
+  /* iOS Safari renders date/time inputs with native chrome that ignores
+     padding and ends up significantly taller than text inputs. Normalize
+     so grid rows stay consistent. */
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 2.625rem;
+    line-height: 1.25rem;
+  }
 }
 
 @layer utilities {

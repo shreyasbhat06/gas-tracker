@@ -2,40 +2,88 @@ import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import type { FuelLogEntry, Station } from '../types'
 import { newId } from '../utils/fuelLog'
+import { latestPriceFor } from '../utils/prices'
 
 interface LogFillUpModalProps {
   open: boolean
   stations: Station[]
+  /** When provided, the modal is in edit-mode for this entry. */
+  entry?: FuelLogEntry | null
+  /** Most recent odometer reading — shown as placeholder hint for new entries
+   *  so the user remembers to enter total miles, not trip miles. */
+  lastOdometer?: number | null
   onClose: () => void
   onSubmit: (entry: FuelLogEntry) => void
 }
 
 const OTHER = '__other__'
 
-export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpModalProps) {
+export function LogFillUpModal({
+  open,
+  stations,
+  entry,
+  lastOdometer,
+  onClose,
+  onSubmit,
+}: LogFillUpModalProps) {
+  const isEdit = !!entry
   const today = new Date().toISOString().slice(0, 10)
+
   const [date, setDate] = useState(today)
   const [odometer, setOdometer] = useState('')
-  const [gallons, setGallons] = useState('')
+  const [totalCost, setTotalCost] = useState('')
   const [pricePerGallon, setPricePerGallon] = useState('')
   const [stationId, setStationId] = useState(stations[0]?.id ?? OTHER)
   const [otherName, setOtherName] = useState('')
   const [filledToFull, setFilledToFull] = useState(true)
   const [fuelLevelAfter, setFuelLevelAfter] = useState('100')
 
+  // Populate state when the modal opens. In edit-mode we use the entry's
+  // own price; otherwise we auto-fill from the default station's latest
+  // premium price.
   useEffect(() => {
     if (!open) return
-    setDate(today)
-    setOdometer('')
-    setGallons('')
-    setPricePerGallon('')
-    setStationId(stations[0]?.id ?? OTHER)
-    setOtherName('')
-    setFilledToFull(true)
-    setFuelLevelAfter('100')
-  }, [open])
+    if (entry) {
+      setDate(entry.date)
+      setOdometer(String(entry.odometer))
+      const cost = entry.totalCost ?? entry.gallons * entry.pricePerGallon
+      setTotalCost(cost.toFixed(2))
+      setPricePerGallon(entry.pricePerGallon.toFixed(3))
+      setStationId(entry.stationId)
+      setOtherName(entry.stationId === OTHER ? entry.stationName : '')
+      setFilledToFull(entry.filledToFull)
+      setFuelLevelAfter(
+        entry.fuelLevelAfter != null ? String(entry.fuelLevelAfter) : '100',
+      )
+    } else {
+      const defaultStation = stations[0]
+      setDate(today)
+      setOdometer('')
+      setTotalCost('')
+      setPricePerGallon(autoFillPrice(defaultStation))
+      setStationId(defaultStation?.id ?? OTHER)
+      setOtherName('')
+      setFilledToFull(true)
+      setFuelLevelAfter('100')
+    }
+    // We deliberately don't want `today` or `stations` in the deps; we only
+    // re-populate on open or when switching to a different entry.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, entry?.id])
+
+  function handleStationChange(newId: string) {
+    setStationId(newId)
+    if (newId === OTHER) return
+    const station = stations.find((s) => s.id === newId)
+    const price = autoFillPrice(station)
+    if (price) setPricePerGallon(price)
+  }
 
   if (!open) return null
+
+  const costNum = Number(totalCost)
+  const priceNum = Number(pricePerGallon)
+  const gallons = costNum > 0 && priceNum > 0 ? costNum / priceNum : null
 
   const stationLabel =
     stationId === OTHER
@@ -45,26 +93,30 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
   const valid =
     !!date &&
     Number(odometer) > 0 &&
-    Number(gallons) > 0 &&
-    Number(pricePerGallon) > 0 &&
+    costNum > 0 &&
+    priceNum > 0 &&
     (stationId !== OTHER || otherName.trim().length > 0)
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
-    if (!valid) return
+    if (!valid || gallons == null) return
     const lvl = Number(fuelLevelAfter)
     onSubmit({
-      id: newId(),
+      id: entry?.id ?? newId(),
       date,
       odometer: Number(odometer),
-      gallons: Number(gallons),
-      pricePerGallon: Number(pricePerGallon),
+      gallons,
+      pricePerGallon: priceNum,
+      totalCost: costNum,
       stationId: stationId === OTHER ? OTHER : stationId,
       stationName: stationLabel,
       filledToFull,
       fuelLevelAfter: Number.isFinite(lvl) ? lvl : undefined,
     })
   }
+
+  const odometerPlaceholder =
+    lastOdometer != null ? `> ${lastOdometer.toLocaleString()}` : '32450'
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -78,7 +130,9 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
           className="sm:hidden mx-auto mb-3 w-10 h-1.5 rounded-full bg-neutral-700"
         />
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Log fill-up</h3>
+          <h3 className="text-lg font-semibold">
+            {isEdit ? 'Edit fill-up' : 'Log fill-up'}
+          </h3>
           <button
             type="button"
             onClick={onClose}
@@ -105,40 +159,18 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
               inputMode="decimal"
               value={odometer}
               onChange={(e) => setOdometer(e.target.value)}
-              placeholder="32450"
-              className={inputCls}
-              required
-            />
-          </Field>
-          <Field label="Gallons">
-            <input
-              type="number"
-              inputMode="decimal"
-              step="0.001"
-              value={gallons}
-              onChange={(e) => setGallons(e.target.value)}
-              placeholder="14.231"
-              className={inputCls}
-              required
-            />
-          </Field>
-          <Field label="$/gal">
-            <input
-              type="number"
-              inputMode="decimal"
-              step="0.001"
-              value={pricePerGallon}
-              onChange={(e) => setPricePerGallon(e.target.value)}
-              placeholder="6.099"
+              placeholder={odometerPlaceholder}
               className={inputCls}
               required
             />
           </Field>
 
+          {/* Station picker is now BEFORE cost so changing station auto-fills
+              $/gal before the user types the cost. */}
           <Field label="Station" full>
             <select
               value={stationId}
-              onChange={(e) => setStationId(e.target.value)}
+              onChange={(e) => handleStationChange(e.target.value)}
               className={inputCls}
             >
               {stations.map((s) => (
@@ -159,6 +191,37 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
                 className={inputCls}
               />
             </Field>
+          )}
+
+          <Field label="Total cost">
+            <PrefixedInput
+              prefix="$"
+              type="number"
+              inputMode="decimal"
+              step="0.01"
+              value={totalCost}
+              onChange={(v) => setTotalCost(v)}
+              placeholder="86.78"
+              required
+            />
+          </Field>
+          <Field label="$/gal">
+            <input
+              type="number"
+              inputMode="decimal"
+              step="0.001"
+              value={pricePerGallon}
+              onChange={(e) => setPricePerGallon(e.target.value)}
+              placeholder="6.099"
+              className={inputCls}
+              required
+            />
+          </Field>
+
+          {gallons != null && (
+            <div className="col-span-2 -mt-1 px-1 text-xs text-neutral-400 tabular-nums">
+              ≈ {gallons.toFixed(3)} gal at ${priceNum.toFixed(3)}/gal
+            </div>
           )}
 
           <div className="col-span-2 mt-1 flex items-start justify-between gap-3 p-3 rounded-xl bg-neutral-800/70 border border-neutral-700/60">
@@ -191,15 +254,44 @@ export function LogFillUpModal({ open, stations, onClose, onSubmit }: LogFillUpM
           disabled={!valid}
           className="mt-5 w-full py-3 rounded-2xl bg-blue-500 hover:bg-blue-400 active:bg-blue-600 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-semibold transition-colors"
         >
-          Save
+          {isEdit ? 'Save changes' : 'Save'}
         </button>
       </form>
     </div>
   )
 }
 
+function autoFillPrice(station: Station | undefined): string {
+  if (!station) return ''
+  const price = latestPriceFor(station, 'premium')
+  return price != null ? price.toFixed(3) : ''
+}
+
 const inputCls =
   'w-full px-3 py-2.5 rounded-xl bg-neutral-800 border border-neutral-700 text-white text-base placeholder-neutral-500 focus:outline-none focus:border-blue-500'
+
+interface PrefixedInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+  prefix: string
+  value: string
+  onChange: (next: string) => void
+}
+
+function PrefixedInput({ prefix, value, onChange, ...rest }: PrefixedInputProps) {
+  return (
+    <div className="relative">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-base pointer-events-none">
+        {prefix}
+      </span>
+      <input
+        {...rest}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={inputCls + ' pl-7'}
+      />
+    </div>
+  )
+}
 
 function Field({
   label,
