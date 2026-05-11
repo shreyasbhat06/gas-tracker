@@ -4,6 +4,12 @@ dist/
 dist-ssr/
 *.local
 
+# Auto-mirrored from data/ by vite.config.ts
+public/data/
+
+# Claude Code workspace (local-machine dev aids)
+.claude/
+
 # Logs
 logs/
 *.log
