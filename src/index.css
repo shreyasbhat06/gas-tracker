@@ -17,7 +17,11 @@
 
   /* iOS Safari renders date/time inputs with native chrome that ignores
      padding and ends up taller than text inputs. Normalize the outer
-     metrics. (The h-11 in inputCls then locks it to 44px exactly.) */
+     metrics. (The h-11 in inputCls then locks it to 44px exactly.)
+     `display: flex; align-items: center` forces iOS Safari to vertically
+     center its shadow-DOM value child — without this, the date text
+     hugs the top of the input on iPhone even though it looks fine on
+     desktop Chrome/Firefox. */
   input[type='date'],
   input[type='time'],
   input[type='datetime-local'] {
@@ -25,17 +29,20 @@
     appearance: none;
     min-height: 2.75rem;
     text-align: left;
+    display: flex;
+    align-items: center;
   }
 
   /* The actual date/time *value* text on iOS Safari lives in a
      shadow-DOM child node that doesn't inherit text-align or margins
      from the outer input — center-aligned and slightly offset by default.
-     Force it flush-left so it matches the placeholder of a text input. */
+     Force it flush-left and let it fill the row so flex-centering works. */
   input[type='date']::-webkit-date-and-time-value,
   input[type='time']::-webkit-date-and-time-value,
   input[type='datetime-local']::-webkit-date-and-time-value {
     text-align: left;
     margin: 0;
+    flex: 1;
   }
 
   /* The native calendar-picker-indicator reserves space even when it
