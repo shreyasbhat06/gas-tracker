@@ -103,6 +103,7 @@ export function PriceBarChart({ stations, fuel, favoriteId }: PriceBarChartProps
               fontSize: 12,
             }}
             labelStyle={{ color: '#e5e5e5' }}
+            itemStyle={{ color: '#e5e5e5' }}
             formatter={(value: number, _name, item) => {
               const change = (item.payload as Row).change
               if (!change || Math.abs(change.delta) < 0.005) {
