@@ -85,7 +85,10 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    // Mobile: one column. Desktop (lg): CTA + KPI rail left, list + chart
+    // right. `contents` keeps the mobile DOM as a single flex column.
+    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,380px)_1fr] lg:items-start lg:gap-6">
+      <div className="contents lg:flex lg:flex-col lg:gap-5">
       <button
         type="button"
         onClick={openForCreate}
@@ -127,7 +130,9 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
           value={stats.milesThisMonth.toLocaleString()}
         />
       </div>
+      </div>
 
+      <div className="contents lg:flex lg:flex-col lg:gap-5">
       <div>
         <div className="flex items-center justify-between mb-2 px-1">
           <h2 className="text-sm font-semibold text-ink">Recent fill-ups</h2>
@@ -155,6 +160,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
       </div>
 
       <MpgTrendChart entries={entries} />
+      </div>
 
       <LogFillUpModal
         open={open}

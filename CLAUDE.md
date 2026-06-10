@@ -63,10 +63,14 @@ Before building infrastructure around an external URL, API, or file:
 7. Before pivoting to a fundamentally different approach (e.g., switching data sources), explicitly state what assumption is being abandoned and confirm it's actually been ruled out — not just unsuccessful under one set of conditions.
 
 ## Design preferences
-- **Dark mode default**: background `#0a0a0a`, cards `#171717`
+- **Token-based theming**: all colors come from CSS variables in `src/index.css` (`--bg`, `--surface`, `--text-1/2/3`, `--accent`, chart tokens…) exposed as Tailwind classes (`bg-app`, `bg-surface`, `text-ink`, `border-line`). Never hardcode `neutral-*` colors or hex values in components — charts read tokens via `useChartTheme()`.
+- **Light + dark mode, follows system** by default; header toggle overrides (persisted as `gas-tracker-theme` in localStorage; pre-paint script in `index.html` prevents theme flash). Dark palette: background `#0a0a0a`, cards `#171717`.
+- **Hero card stays dark in both themes** — it's the brand anchor (wallet-card feel); its inner colors are intentionally literal.
 - **BMW M-color accent**: subtle blue→purple gradient, used sparingly (hero card only, not splashed everywhere)
-- Rounded-2xl cards, soft shadows, generous whitespace
-- **Mobile-first** — optimized for 390px iPhone width; this app lives on the phone home screen
+- Rounded-2xl cards (use the `.card` class), soft shadows, generous whitespace
+- **Mobile-first** — optimized for 390px iPhone width; this app lives on the phone home screen. Desktop gets a two-column layout at `lg:` (summary rail left, charts/list right).
+- One `SegmentedControl` component for all tab/toggle controls (sliding thumb, arrow-key support)
+- Directions links must go through `directionsUrl()` in `src/utils/maps.ts` (Apple Maps on Apple platforms, Google Maps elsewhere — never `maps://`)
 - System font stack (`-apple-system, BlinkMacSystemFont, ...`)
 - Premium iOS-app feel, not a generic dashboard
 - Prefer fewer, larger, well-spaced elements over information density

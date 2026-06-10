@@ -26,36 +26,42 @@ export function PricesTab({ data }: { data: PricesData }) {
   const favIsCheapest = !!(fav && top && fav.id === top.id)
 
   return (
-    <div className="flex flex-col gap-4">
-      {fav && (
-        <HeroCard
-          station={fav}
-          fuel={fuel}
-          onChangeStation={() => setPickerOpen(true)}
+    // Mobile: one column in reading order. Desktop (lg): summary rail on the
+    // left, charts get the remaining width. `contents` keeps the mobile DOM
+    // flowing as a single flex column.
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(320px,380px)_1fr] lg:items-start lg:gap-6">
+      <div className="contents lg:flex lg:flex-col lg:gap-4">
+        {fav && (
+          <HeroCard
+            station={fav}
+            fuel={fuel}
+            onChangeStation={() => setPickerOpen(true)}
+          />
+        )}
+
+        {top && (
+          <CheapestCard station={top} fuel={fuel} isFavorite={favIsCheapest} />
+        )}
+
+        <SegmentedControl<FuelType>
+          value={fuel}
+          onChange={setFuel}
+          label="Fuel type"
+          options={[
+            { value: 'premium', label: 'Premium' },
+            { value: 'regular', label: 'Regular' },
+          ]}
         />
-      )}
 
-      {top && (
-        <CheapestCard station={top} fuel={fuel} isFavorite={favIsCheapest} />
-      )}
+        <UpdatedLine updated={updated} className="hidden lg:inline-flex" />
+      </div>
 
-      <SegmentedControl<FuelType>
-        value={fuel}
-        onChange={setFuel}
-        label="Fuel type"
-        options={[
-          { value: 'premium', label: 'Premium' },
-          { value: 'regular', label: 'Regular' },
-        ]}
-      />
+      <div className="contents lg:flex lg:flex-col lg:gap-4">
+        <PriceBarChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
+        <PriceTrendChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
+      </div>
 
-      <PriceBarChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
-      <PriceTrendChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
-
-      <p className="text-center text-xs text-ink-3 inline-flex items-center justify-center gap-1.5 self-center">
-        <LiveDot fresh={isFresh(updated)} />
-        Updated {formatLastUpdated(updated)}
-      </p>
+      <UpdatedLine updated={updated} className="lg:hidden" />
 
       <StationPickerSheet
         open={pickerOpen}
@@ -66,6 +72,26 @@ export function PricesTab({ data }: { data: PricesData }) {
         onSelect={setFavId}
       />
     </div>
+  )
+}
+
+function UpdatedLine({
+  updated,
+  className,
+}: {
+  updated: string | null
+  className?: string
+}) {
+  return (
+    <p
+      className={
+        'text-center text-xs text-ink-3 items-center justify-center gap-1.5 self-center inline-flex ' +
+        (className ?? '')
+      }
+    >
+      <LiveDot fresh={isFresh(updated)} />
+      Updated {formatLastUpdated(updated)}
+    </p>
   )
 }
 
