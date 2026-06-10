@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Fuel, Moon, MonitorSmartphone, Sun } from 'lucide-react'
+import { Fuel, SwatchBook } from 'lucide-react'
 import { SegmentedControl } from './components/SegmentedControl'
+import { AppearanceSheet } from './components/AppearanceSheet'
 import { PricesTab } from './components/PricesTab'
 import { FuelLogTab } from './components/FuelLogTab'
 import { loadPrices } from './utils/prices'
-import { useTheme, type ThemePref } from './utils/theme'
 import type { PricesData } from './types'
 
 type TabKey = 'prices' | 'fuel'
@@ -15,6 +15,7 @@ function App() {
   const [tab, setTab] = useState<TabKey>('prices')
   const [data, setData] = useState<PricesData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [appearanceOpen, setAppearanceOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -32,9 +33,15 @@ function App() {
         <header className="flex items-center gap-2.5 mb-5">
           <Fuel className="w-6 h-6 text-ink-2" />
           <h1 className="text-xl font-semibold tracking-tight">Gas Tracker</h1>
-          <div className="ml-auto">
-            <ThemeToggle />
-          </div>
+          <button
+            type="button"
+            onClick={() => setAppearanceOpen(true)}
+            aria-label="Appearance"
+            title="Appearance"
+            className="ml-auto p-2.5 -mr-2 rounded-full text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 motion-reduce:transform-none transition"
+          >
+            <SwatchBook className="w-5 h-5" />
+          </button>
         </header>
 
         <div className="lg:w-[360px]">
@@ -61,37 +68,12 @@ function App() {
           {tab === 'fuel' && <FuelLogTab stations={data?.stations ?? []} />}
         </main>
       </div>
+
+      <AppearanceSheet
+        open={appearanceOpen}
+        onClose={() => setAppearanceOpen(false)}
+      />
     </div>
-  )
-}
-
-// Cycles System → Light → Dark. One quiet icon button, not a settings page —
-// the default (system) is right for almost everyone.
-const THEME_CYCLE: Record<ThemePref, ThemePref> = {
-  system: 'light',
-  light: 'dark',
-  dark: 'system',
-}
-
-function ThemeToggle() {
-  const { pref, setPref } = useTheme()
-  const Icon =
-    pref === 'system' ? MonitorSmartphone : pref === 'light' ? Sun : Moon
-  const labels: Record<ThemePref, string> = {
-    system: 'Theme: automatic',
-    light: 'Theme: light',
-    dark: 'Theme: dark',
-  }
-  return (
-    <button
-      type="button"
-      onClick={() => setPref(THEME_CYCLE[pref])}
-      aria-label={`${labels[pref]} — tap to change`}
-      title={labels[pref]}
-      className="p-2.5 -mr-2 rounded-full text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 motion-reduce:transform-none transition"
-    >
-      <Icon className="w-5 h-5" />
-    </button>
   )
 }
 

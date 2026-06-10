@@ -64,8 +64,9 @@ Before building infrastructure around an external URL, API, or file:
 
 ## Design preferences
 - **Token-based theming**: all colors come from CSS variables in `src/index.css` (`--bg`, `--surface`, `--text-1/2/3`, `--accent`, chart tokens…) exposed as Tailwind classes (`bg-app`, `bg-surface`, `text-ink`, `border-line`). Never hardcode `neutral-*` colors or hex values in components — charts read tokens via `useChartTheme()`.
-- **Light + dark mode, follows system** by default; header toggle overrides (persisted as `gas-tracker-theme` in localStorage; pre-paint script in `index.html` prevents theme flash). Dark palette: background `#0a0a0a`, cards `#171717`.
-- **Hero card stays dark in both themes** — it's the brand anchor (wallet-card feel); its inner colors are intentionally literal.
+- **Light + dark mode, follows system** by default; the header Appearance sheet overrides mode and picks a skin (persisted as `gas-tracker-theme` / `gas-tracker-skin`; pre-paint script in `index.html` prevents theme flash). Dark palette is cool zinc: background `#09090b`, cards `#18181b`. Light cards carry soft layered shadows (`--shadow-card`).
+- **Skins**: M Sport (default blue/violet), Rosso (red/amber), Stealth (monochrome) — each is a CSS-variable override block in `index.css` (`:root[data-skin=…]` + `:root.dark[data-skin=…]`) over `--accent*`, `--hero-*`, `--chart-line-accent`. New skins = new CSS block + `SKINS` entry in `src/utils/theme.ts`.
+- **Hero card is theme-aware** via `--hero-*` tokens: pastel gradient wash on white in light mode, deep glow in dark.
 - **BMW M-color accent**: subtle blue→purple gradient, used sparingly (hero card only, not splashed everywhere)
 - Rounded-2xl cards (use the `.card` class), soft shadows, generous whitespace
 - **Mobile-first** — optimized for 390px iPhone width; this app lives on the phone home screen. Desktop gets a two-column layout at `lg:` (summary rail left, charts/list right).
