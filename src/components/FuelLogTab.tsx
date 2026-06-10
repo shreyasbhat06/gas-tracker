@@ -89,7 +89,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
       <button
         type="button"
         onClick={openForCreate}
-        className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white font-semibold shadow-lg shadow-blue-500/10 transition-colors"
+        className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none text-white font-semibold shadow-lg shadow-accent/10 transition"
       >
         <Plus className="w-5 h-5" />
         Log fill-up
@@ -130,7 +130,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
 
       <div>
         <div className="flex items-center justify-between mb-2 px-1">
-          <h2 className="text-sm font-semibold text-neutral-200">Recent fill-ups</h2>
+          <h2 className="text-sm font-semibold text-ink">Recent fill-ups</h2>
           <div className="flex gap-1">
             <IconButton
               onClick={() => downloadJson(entries)}
@@ -185,7 +185,7 @@ function IconButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-white/5 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-neutral-400"
+      className="p-2 rounded-lg text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-ink-2"
     >
       {children}
     </button>

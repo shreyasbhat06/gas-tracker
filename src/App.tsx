@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Fuel } from 'lucide-react'
-import { Tabs } from './components/Tabs'
+import { Fuel, Moon, MonitorSmartphone, Sun } from 'lucide-react'
+import { SegmentedControl } from './components/SegmentedControl'
 import { PricesTab } from './components/PricesTab'
 import { FuelLogTab } from './components/FuelLogTab'
 import { loadPrices } from './utils/prices'
+import { useTheme, type ThemePref } from './utils/theme'
 import type { PricesData } from './types'
 
 type TabKey = 'prices' | 'fuel'
@@ -26,21 +27,27 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="max-w-xl mx-auto px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-6 safe-bottom">
+    <div className="min-h-screen bg-app text-ink">
+      <div className="max-w-xl lg:max-w-5xl mx-auto px-4 lg:px-8 pt-[max(env(safe-area-inset-top),1rem)] pb-6 safe-bottom">
         <header className="flex items-center gap-2.5 mb-5">
-          <Fuel className="w-6 h-6 text-neutral-300" />
+          <Fuel className="w-6 h-6 text-ink-2" />
           <h1 className="text-xl font-semibold tracking-tight">Gas Tracker</h1>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
 
-        <Tabs<TabKey>
-          value={tab}
-          onChange={setTab}
-          options={[
-            { value: 'prices', label: 'Prices' },
-            { value: 'fuel', label: 'Fuel Log' },
-          ]}
-        />
+        <div className="lg:w-[360px]">
+          <SegmentedControl<TabKey>
+            value={tab}
+            onChange={setTab}
+            label="Section"
+            options={[
+              { value: 'prices', label: 'Prices' },
+              { value: 'fuel', label: 'Fuel Log' },
+            ]}
+          />
+        </div>
 
         <main className="mt-5">
           {tab === 'prices' &&
@@ -58,22 +65,59 @@ function App() {
   )
 }
 
+// Cycles System → Light → Dark. One quiet icon button, not a settings page —
+// the default (system) is right for almost everyone.
+const THEME_CYCLE: Record<ThemePref, ThemePref> = {
+  system: 'light',
+  light: 'dark',
+  dark: 'system',
+}
+
+function ThemeToggle() {
+  const { pref, setPref } = useTheme()
+  const Icon =
+    pref === 'system' ? MonitorSmartphone : pref === 'light' ? Sun : Moon
+  const labels: Record<ThemePref, string> = {
+    system: 'Theme: automatic',
+    light: 'Theme: light',
+    dark: 'Theme: dark',
+  }
+  return (
+    <button
+      type="button"
+      onClick={() => setPref(THEME_CYCLE[pref])}
+      aria-label={`${labels[pref]} — tap to change`}
+      title={labels[pref]}
+      className="p-2.5 -mr-2 rounded-full text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 motion-reduce:transform-none transition"
+    >
+      <Icon className="w-5 h-5" />
+    </button>
+  )
+}
+
 function LoadingBlock() {
   return (
-    <div className="flex flex-col gap-4 animate-pulse">
-      <div className="h-44 rounded-3xl bg-neutral-900" />
-      <div className="h-16 rounded-2xl bg-neutral-900" />
-      <div className="h-10 rounded-2xl bg-neutral-900" />
-      <div className="h-72 rounded-2xl bg-neutral-900" />
+    <div className="flex flex-col gap-4 animate-pulse lg:grid lg:grid-cols-[minmax(320px,380px)_1fr] lg:items-start lg:gap-6">
+      <div className="contents lg:flex lg:flex-col lg:gap-4">
+        <div className="h-44 rounded-3xl bg-surface" />
+        <div className="h-16 rounded-2xl bg-surface" />
+        <div className="h-11 rounded-2xl bg-surface" />
+      </div>
+      <div className="contents lg:flex lg:flex-col lg:gap-4">
+        <div className="h-72 rounded-2xl bg-surface" />
+        <div className="hidden lg:block h-72 rounded-2xl bg-surface" />
+      </div>
     </div>
   )
 }
 
 function ErrorBlock({ message }: { message: string }) {
   return (
-    <div className="rounded-2xl bg-neutral-900 p-6">
-      <p className="text-rose-400 text-sm font-medium mb-1">Failed to load prices</p>
-      <p className="text-neutral-400 text-xs break-words">{message}</p>
+    <div className="card p-6">
+      <p className="text-rose-600 dark:text-rose-400 text-sm font-medium mb-1">
+        Failed to load prices
+      </p>
+      <p className="text-ink-2 text-xs break-words">{message}</p>
     </div>
   )
 }

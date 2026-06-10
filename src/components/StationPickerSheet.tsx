@@ -30,19 +30,19 @@ export function StationPickerSheet({
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-modal-backdrop">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm animate-modal-backdrop">
       <div className="absolute inset-0" onClick={onClose} aria-hidden />
-      <div className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[80vh] animate-modal-sheet">
+      <div className="relative w-full max-w-md mx-auto bg-surface rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[80vh] animate-modal-sheet">
         <div
           aria-hidden
-          className="sm:hidden mx-auto mt-2.5 w-10 h-1.5 rounded-full bg-neutral-700"
+          className="sm:hidden mx-auto mt-2.5 w-10 h-1.5 rounded-full bg-line-strong"
         />
         <div className="flex items-center justify-between p-5 pb-3">
           <h3 className="text-lg font-semibold">Choose home station</h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 -mr-2 rounded-full text-neutral-400 hover:text-white hover:bg-white/5"
+            className="p-2 -mr-2 rounded-full text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -63,24 +63,26 @@ export function StationPickerSheet({
                 }}
                 className={
                   'w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-colors ' +
-                  (active ? 'bg-white/5' : 'hover:bg-white/5')
+                  (active
+                    ? 'bg-black/5 dark:bg-white/5'
+                    : 'hover:bg-black/5 dark:hover:bg-white/5')
                 }
               >
                 <div className="flex-1 text-left min-w-0">
-                  <div className="text-sm font-medium text-neutral-100 truncate">
+                  <div className="text-sm font-medium text-ink truncate">
                     {s.name}
                   </div>
                   {meta.neighborhood && (
-                    <div className="text-xs text-neutral-500 truncate">
+                    <div className="text-xs text-ink-3 truncate">
                       {meta.neighborhood}
                     </div>
                   )}
                 </div>
-                <div className="text-sm tabular-nums text-neutral-300 shrink-0">
+                <div className="text-sm tabular-nums text-ink-2 shrink-0">
                   {formatPrice(price)}
                 </div>
                 <div className="w-5 shrink-0">
-                  {active && <Check className="w-4 h-4 text-blue-400" />}
+                  {active && <Check className="w-4 h-4 text-accent" />}
                 </div>
               </button>
             )

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { FuelType, PricesData } from '../types'
 import { cheapest, formatLastUpdated, isFresh, latestTimestamp } from '../utils/prices'
 import { loadFavoriteId, saveFavoriteId } from '../utils/favorite'
+import { SegmentedControl } from './SegmentedControl'
 import { HeroCard } from './HeroCard'
 import { CheapestCard } from './CheapestCard'
 import { PriceBarChart } from './PriceBarChart'
@@ -38,12 +39,20 @@ export function PricesTab({ data }: { data: PricesData }) {
         <CheapestCard station={top} fuel={fuel} isFavorite={favIsCheapest} />
       )}
 
-      <FuelToggle value={fuel} onChange={setFuel} />
+      <SegmentedControl<FuelType>
+        value={fuel}
+        onChange={setFuel}
+        label="Fuel type"
+        options={[
+          { value: 'premium', label: 'Premium' },
+          { value: 'regular', label: 'Regular' },
+        ]}
+      />
 
       <PriceBarChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
       <PriceTrendChart stations={stations} fuel={fuel} favoriteId={fav?.id ?? null} />
 
-      <p className="text-center text-xs text-neutral-500 inline-flex items-center justify-center gap-1.5 self-center">
+      <p className="text-center text-xs text-ink-3 inline-flex items-center justify-center gap-1.5 self-center">
         <LiveDot fresh={isFresh(updated)} />
         Updated {formatLastUpdated(updated)}
       </p>
@@ -61,7 +70,7 @@ export function PricesTab({ data }: { data: PricesData }) {
 }
 
 function LiveDot({ fresh }: { fresh: boolean }) {
-  const color = fresh ? 'bg-emerald-500' : 'bg-neutral-600'
+  const color = fresh ? 'bg-emerald-500' : 'bg-ink-3'
   return (
     <span className="relative flex w-1.5 h-1.5">
       {fresh && (
@@ -72,30 +81,5 @@ function LiveDot({ fresh }: { fresh: boolean }) {
       )}
       <span className={`relative w-1.5 h-1.5 rounded-full ${color}`} />
     </span>
-  )
-}
-
-function FuelToggle({ value, onChange }: { value: FuelType; onChange: (v: FuelType) => void }) {
-  return (
-    <div className="flex gap-1 p-1 bg-neutral-900 rounded-2xl">
-      {(['premium', 'regular'] as const).map((opt) => {
-        const active = opt === value
-        return (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => onChange(opt)}
-            className={
-              'flex-1 py-2 px-4 rounded-xl text-sm font-medium capitalize transition-colors ' +
-              (active
-                ? 'bg-neutral-800 text-white shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200')
-            }
-          >
-            {opt}
-          </button>
-        )
-      })}
-    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react'
+import { ChevronRight, Trash2 } from 'lucide-react'
 import type { FuelLogEntry } from '../types'
 
 interface FillUpListProps {
@@ -10,7 +10,7 @@ interface FillUpListProps {
 export function FillUpList({ entries, onDelete, onEdit }: FillUpListProps) {
   if (!entries.length) {
     return (
-      <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] p-6 text-center text-sm text-neutral-400">
+      <div className="card p-6 text-center text-sm text-ink-2">
         No fill-ups yet. Tap “Log fill-up” to add your first one.
       </div>
     )
@@ -20,7 +20,7 @@ export function FillUpList({ entries, onDelete, onEdit }: FillUpListProps) {
   const reversed = [...entries].reverse()
 
   return (
-    <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] overflow-hidden divide-y divide-neutral-800">
+    <div className="card overflow-hidden divide-y divide-line">
       {reversed.map((e) => (
         <FillUpRow key={e.id} entry={e} onDelete={onDelete} onEdit={onEdit} />
       ))}
@@ -43,19 +43,19 @@ function FillUpRow({
       <button
         type="button"
         onClick={() => onEdit(entry)}
-        className="flex-1 min-w-0 flex items-center gap-3 px-4 py-3.5 text-left hover:bg-white/[0.02] active:bg-white/[0.04] transition-colors"
+        className="group flex-1 min-w-0 flex items-center gap-2 px-4 py-3.5 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] active:bg-black/[0.04] dark:active:bg-white/[0.04] transition-colors"
         aria-label={`Edit fill-up at ${entry.stationName}`}
       >
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-medium text-neutral-100 truncate">
+            <span className="text-sm font-medium text-ink truncate">
               {entry.stationName}
             </span>
-            <span className="text-xs text-neutral-500 shrink-0">
+            <span className="text-xs text-ink-3 shrink-0">
               {formatDate(entry.date)}
             </span>
           </div>
-          <div className="mt-0.5 text-xs text-neutral-400 tabular-nums">
+          <div className="mt-0.5 text-xs text-ink-2 tabular-nums">
             {entry.gallons.toFixed(2)} gal · ${entry.pricePerGallon.toFixed(3)}/gal ·{' '}
             {entry.odometer.toLocaleString()} mi
           </div>
@@ -63,6 +63,8 @@ function FillUpRow({
         <div className="text-right shrink-0">
           <div className="text-sm font-semibold tabular-nums">${cost.toFixed(2)}</div>
         </div>
+        {/* Quiet edit affordance — rows look tappable, not just informational. */}
+        <ChevronRight className="w-4 h-4 shrink-0 text-ink-3/60 group-hover:text-ink-2 transition-colors" />
       </button>
       <button
         type="button"
@@ -70,7 +72,7 @@ function FillUpRow({
           e.stopPropagation()
           if (confirm('Delete this fill-up?')) onDelete(entry.id)
         }}
-        className="px-3 text-neutral-500 hover:text-rose-400 hover:bg-white/5 transition-colors"
+        className="w-11 grid place-items-center text-ink-3 hover:text-rose-500 dark:hover:text-rose-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
         aria-label="Delete fill-up"
       >
         <Trash2 className="w-4 h-4" />

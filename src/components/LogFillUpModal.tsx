@@ -119,15 +119,15 @@ export function LogFillUpModal({
     lastOdometer != null ? `> ${lastOdometer.toLocaleString()}` : '32450'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-modal-backdrop">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm animate-modal-backdrop">
       <div className="absolute inset-0" onClick={onClose} aria-hidden />
       <form
         onSubmit={submit}
-        className="relative w-full max-w-md mx-auto bg-neutral-900 rounded-t-3xl sm:rounded-3xl p-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] shadow-2xl animate-modal-sheet"
+        className="relative w-full max-w-md mx-auto bg-surface rounded-t-3xl sm:rounded-3xl p-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] shadow-2xl animate-modal-sheet"
       >
         <div
           aria-hidden
-          className="sm:hidden mx-auto mb-3 w-10 h-1.5 rounded-full bg-neutral-700"
+          className="sm:hidden mx-auto mb-3 w-10 h-1.5 rounded-full bg-line-strong"
         />
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">
@@ -136,7 +136,7 @@ export function LogFillUpModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 -mr-2 rounded-full text-neutral-400 hover:text-white hover:bg-white/5"
+            className="p-2 -mr-2 rounded-full text-ink-2 hover:text-ink hover:bg-black/5 dark:hover:bg-white/5"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -219,15 +219,15 @@ export function LogFillUpModal({
           </Field>
 
           {gallons != null && (
-            <div className="col-span-2 -mt-1 px-1 text-xs text-neutral-400 tabular-nums">
+            <div className="col-span-2 -mt-1 px-1 text-xs text-ink-2 tabular-nums">
               ≈ {gallons.toFixed(3)} gal at ${priceNum.toFixed(3)}/gal
             </div>
           )}
 
-          <div className="col-span-2 mt-1 flex items-start justify-between gap-3 p-3 rounded-xl bg-neutral-800/70 border border-neutral-700/60">
+          <div className="col-span-2 mt-1 flex items-start justify-between gap-3 p-3 rounded-xl bg-surface-2 border border-line">
             <div>
-              <div className="text-sm font-medium text-neutral-100">Filled to full</div>
-              <div className="mt-0.5 text-xs text-neutral-400">
+              <div className="text-sm font-medium text-ink">Filled to full</div>
+              <div className="mt-0.5 text-xs text-ink-2">
                 MPG is computed between full fills. Uncheck for partial fills.
               </div>
             </div>
@@ -252,7 +252,7 @@ export function LogFillUpModal({
         <button
           type="submit"
           disabled={!valid}
-          className="mt-5 w-full py-3 rounded-2xl bg-blue-500 hover:bg-blue-400 active:bg-blue-600 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-semibold transition-colors"
+          className="mt-5 w-full py-3 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none disabled:bg-surface-2 disabled:text-ink-3 disabled:active:scale-100 text-white font-semibold transition"
         >
           {isEdit ? 'Save changes' : 'Save'}
         </button>
@@ -271,7 +271,7 @@ function autoFillPrice(station: Station | undefined): string {
 // the same height regardless of type. Without it, iOS Safari sizes date,
 // select, and text inputs slightly differently and the grid drifts.
 const inputCls =
-  'block w-full h-11 px-3 rounded-xl bg-neutral-800 border border-neutral-700 text-white text-base placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-colors'
+  'block w-full h-11 px-3 rounded-xl bg-surface-2 border border-line-strong text-ink text-base placeholder-ink-3 focus:outline-none focus:border-accent transition-colors'
 
 interface PrefixedInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
@@ -283,7 +283,7 @@ interface PrefixedInputProps
 function PrefixedInput({ prefix, value, onChange, ...rest }: PrefixedInputProps) {
   return (
     <div className="relative">
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-base pointer-events-none select-none">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-2 text-base pointer-events-none select-none">
         {prefix}
       </span>
       <input
@@ -308,7 +308,7 @@ function Field({
 }) {
   return (
     <label className={'flex flex-col gap-1.5 ' + (full ? 'col-span-2' : '')}>
-      <span className="text-xs uppercase tracking-wider text-neutral-500 font-medium">
+      <span className="text-xs uppercase tracking-wider text-ink-3 font-medium">
         {label}
       </span>
       {children}
@@ -325,7 +325,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (next: bool
       onClick={() => onChange(!checked)}
       className={
         'relative shrink-0 w-11 h-6 rounded-full transition-colors ' +
-        (checked ? 'bg-blue-500' : 'bg-neutral-700')
+        (checked ? 'bg-accent' : 'bg-line-strong')
       }
     >
       <span

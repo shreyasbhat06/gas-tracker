@@ -16,7 +16,10 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
   const mapsUrl = `maps://?daddr=${encodeURIComponent(meta.mapsQuery)}`
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-neutral-900 shadow-lg">
+    // The hero stays dark in BOTH themes: it reads as a physical "car card"
+    // object (wallet-pass style) and keeps the M-gradient calibrated for one
+    // background instead of two. Inner colors are deliberately literal.
+    <div className="relative overflow-hidden rounded-3xl bg-neutral-900 text-neutral-100 shadow-lg dark:shadow-black/40 shadow-neutral-900/20">
       {/* Subtle BMW M-style blue→purple wash. */}
       <div
         aria-hidden
@@ -44,7 +47,7 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
           <button
             type="button"
             onClick={onChangeStation}
-            className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 active:bg-white/15 backdrop-blur-sm transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 active:bg-white/15 active:scale-[0.97] motion-reduce:transform-none backdrop-blur-sm transition"
           >
             Change
             <ChevronDown className="w-3.5 h-3.5" />
@@ -68,7 +71,7 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
 
         <a
           href={mapsUrl}
-          className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 transition-colors text-sm font-medium text-white backdrop-blur-sm"
+          className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 active:scale-[0.97] motion-reduce:transform-none transition text-sm font-medium text-white backdrop-blur-sm"
         >
           <Navigation className="w-4 h-4" />
           Directions
