@@ -12,7 +12,9 @@ import {
 } from 'recharts'
 import type { FuelType, Station } from '../types'
 import { buildTrendSeries } from '../utils/prices'
+import { useChartTheme, type ChartTheme } from '../utils/chartTheme'
 import { colorFor } from '../data/stationMeta'
+import { SegmentedControl } from './SegmentedControl'
 
 interface PriceTrendChartProps {
   stations: Station[]
@@ -24,47 +26,34 @@ type Mode = 'range' | 'all'
 
 export function PriceTrendChart({ stations, fuel, favoriteId }: PriceTrendChartProps) {
   const [mode, setMode] = useState<Mode>('range')
+  const t = useChartTheme()
   const data = buildTrendSeries(stations, fuel, 30)
 
   return (
-    <div className="rounded-2xl bg-neutral-900 border border-white/[0.04] p-4">
+    <div className="card p-4">
       <div className="mb-3 px-2 flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold text-neutral-200">30-day trend</h2>
-        <ModeToggle value={mode} onChange={setMode} />
+        <h2 className="text-sm font-semibold text-ink">30-day trend</h2>
+        <SegmentedControl<Mode>
+          value={mode}
+          onChange={setMode}
+          label="Trend chart mode"
+          size="sm"
+          options={[
+            { value: 'range', label: 'Range' },
+            { value: 'all', label: 'All' },
+          ]}
+        />
       </div>
 
       {data.length === 0 ? (
-        <div className="px-2 py-8 text-center text-sm text-neutral-500">
+        <div className="px-2 py-8 text-center text-sm text-ink-3">
           No history yet — run the scraper a few times to fill this in.
         </div>
       ) : mode === 'range' ? (
-        <RangeChart stations={stations} favoriteId={favoriteId} data={data} />
+        <RangeChart stations={stations} favoriteId={favoriteId} data={data} t={t} />
       ) : (
-        <AllChart stations={stations} data={data} />
+        <AllChart stations={stations} data={data} t={t} />
       )}
-    </div>
-  )
-}
-
-function ModeToggle({ value, onChange }: { value: Mode; onChange: (v: Mode) => void }) {
-  return (
-    <div className="flex gap-0.5 p-0.5 bg-neutral-800 rounded-lg text-[11px]">
-      {(['range', 'all'] as const).map((m) => {
-        const active = m === value
-        return (
-          <button
-            key={m}
-            type="button"
-            onClick={() => onChange(m)}
-            className={
-              'px-2.5 py-1 rounded-md font-medium capitalize transition-colors ' +
-              (active ? 'bg-neutral-700 text-white' : 'text-neutral-400 hover:text-neutral-200')
-            }
-          >
-            {m === 'range' ? 'Range' : 'All'}
-          </button>
-        )
-      })}
     </div>
   )
 }
@@ -75,11 +64,13 @@ interface RangeChartProps {
   stations: Station[]
   favoriteId: string | null
   data: Array<Record<string, string | number>>
+  t: ChartTheme
 }
 
-function RangeChart({ stations, favoriteId, data }: RangeChartProps) {
+function RangeChart({ stations, favoriteId, data, t }: RangeChartProps) {
   const ids = stations.map((s) => s.id)
   const fav = stations.find((s) => s.id === favoriteId) ?? null
+  const favStroke = t.resolved === 'dark' ? '#60a5fa' : '#2563eb'
 
   const enriched = data.map((row) => {
     const prices = ids
@@ -98,78 +89,84 @@ function RangeChart({ stations, favoriteId, data }: RangeChartProps) {
 
   return (
     <>
-      <div className="px-2 pb-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-neutral-400">
+      <div className="px-2 pb-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-ink-2">
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-3 h-1 rounded-full bg-blue-500 inline-block" />
+          <span
+            className="w-3 h-1 rounded-full inline-block"
+            style={{ background: favStroke }}
+          />
           {fav ? fav.name : 'Your station'}
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-3 h-2 rounded-sm bg-neutral-600/50 inline-block" />
+          <span
+            className="w-3 h-2 rounded-sm inline-block opacity-50"
+            style={{ background: t.barNeutral }}
+          />
           Range across all stations
         </span>
       </div>
-      <ResponsiveContainer width="100%" height={240}>
-        <ComposedChart data={enriched} margin={{ top: 4, right: 12, bottom: 4, left: -12 }}>
-          <defs>
-            <linearGradient id="trendRangeFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#737373" stopOpacity={0.35} />
-              <stop offset="100%" stopColor="#737373" stopOpacity={0.1} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid stroke="#262626" />
-          <XAxis
-            dataKey="dateLabel"
-            stroke="#525252"
-            tick={{ fill: '#a3a3a3', fontSize: 11 }}
-            minTickGap={20}
-          />
-          <YAxis
-            stroke="#525252"
-            tick={{ fill: '#a3a3a3', fontSize: 11 }}
-            tickFormatter={(v: number) => `$${v.toFixed(2)}`}
-            domain={['dataMin - 0.05', 'dataMax + 0.05']}
-          />
-          <Tooltip
-            contentStyle={{
-              background: '#171717',
-              border: '1px solid #262626',
-              borderRadius: 12,
-              fontSize: 12,
-            }}
-            labelStyle={{ color: '#e5e5e5' }}
-            formatter={(value: unknown, name: string) => {
-              if (Array.isArray(value)) {
-                const [lo, hi] = value as [number, number]
-                return [`$${lo.toFixed(3)} – $${hi.toFixed(3)}`, 'Range']
-              }
-              if (typeof value === 'number') {
-                return [`$${value.toFixed(3)}`, name]
-              }
-              return [String(value), name]
-            }}
-          />
-          <Area
-            type="monotone"
-            dataKey="range"
-            stroke="none"
-            fill="url(#trendRangeFill)"
-            isAnimationActive={false}
-            connectNulls
-          />
-          {fav && (
-            <Line
-              dataKey={fav.id}
-              name={fav.name}
+      <div className="h-[240px] lg:h-[320px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={enriched} margin={{ top: 4, right: 12, bottom: 4, left: -12 }}>
+            <defs>
+              <linearGradient id="trendRangeFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={t.barNeutral} stopOpacity={0.35} />
+                <stop offset="100%" stopColor={t.barNeutral} stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid stroke={t.grid} strokeDasharray="3 3" />
+            <XAxis
+              dataKey="dateLabel"
+              axisLine={false}
+              tickLine={false}
+              tick={t.tick}
+              minTickGap={20}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={t.tick}
+              tickFormatter={(v: number) => `$${v.toFixed(2)}`}
+              domain={['dataMin - 0.05', 'dataMax + 0.05']}
+            />
+            <Tooltip
+              contentStyle={t.tooltipStyle}
+              labelStyle={t.tooltipText}
+              itemStyle={t.tooltipText}
+              formatter={(value: unknown, name: string) => {
+                if (Array.isArray(value)) {
+                  const [lo, hi] = value as [number, number]
+                  return [`$${lo.toFixed(3)} – $${hi.toFixed(3)}`, 'Range']
+                }
+                if (typeof value === 'number') {
+                  return [`$${value.toFixed(3)}`, name]
+                }
+                return [String(value), name]
+              }}
+            />
+            <Area
               type="monotone"
-              stroke="#60a5fa"
-              strokeWidth={2.5}
-              dot={{ r: 3, fill: '#60a5fa', stroke: '#0a0a0a', strokeWidth: 2 }}
-              activeDot={{ r: 5 }}
+              dataKey="range"
+              stroke="none"
+              fill="url(#trendRangeFill)"
+              isAnimationActive={false}
               connectNulls
             />
-          )}
-        </ComposedChart>
-      </ResponsiveContainer>
+            {fav && (
+              <Line
+                dataKey={fav.id}
+                name={fav.name}
+                type="monotone"
+                stroke={favStroke}
+                strokeWidth={2.5}
+                dot={{ r: 3, fill: favStroke, stroke: t.bg, strokeWidth: 2 }}
+                activeDot={{ r: 5 }}
+                connectNulls
+              />
+            )}
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
     </>
   )
 }
@@ -179,9 +176,11 @@ function RangeChart({ stations, favoriteId, data }: RangeChartProps) {
 function AllChart({
   stations,
   data,
+  t,
 }: {
   stations: Station[]
   data: Array<Record<string, string | number>>
+  t: ChartTheme
 }) {
   const [hidden, setHidden] = useState<Set<string>>(new Set())
   const toggle = (id: string) => {
@@ -211,55 +210,55 @@ function AllChart({
                 className="w-2 h-2 rounded-full inline-block"
                 style={{ background: colorFor(i) }}
               />
-              <span className={off ? 'text-neutral-500 line-through' : 'text-neutral-400'}>
+              <span className={off ? 'text-ink-3 line-through' : 'text-ink-2'}>
                 {s.name}
               </span>
             </button>
           )
         })}
       </div>
-      <ResponsiveContainer width="100%" height={260}>
-        <LineChart data={data} margin={{ top: 4, right: 12, bottom: 4, left: -12 }}>
-          <CartesianGrid stroke="#262626" />
-          <XAxis
-            dataKey="dateLabel"
-            stroke="#525252"
-            tick={{ fill: '#a3a3a3', fontSize: 11 }}
-            minTickGap={20}
-          />
-          <YAxis
-            stroke="#525252"
-            tick={{ fill: '#a3a3a3', fontSize: 11 }}
-            tickFormatter={(v: number) => `$${v.toFixed(2)}`}
-            domain={['dataMin - 0.05', 'dataMax + 0.05']}
-          />
-          <Tooltip
-            contentStyle={{
-              background: '#171717',
-              border: '1px solid #262626',
-              borderRadius: 12,
-              fontSize: 12,
-            }}
-            labelStyle={{ color: '#e5e5e5' }}
-            formatter={(value: number) => `$${value.toFixed(3)}`}
-          />
-          {stations.map((s, i) => {
-            if (hidden.has(s.id)) return null
-            return (
-              <Line
-                key={s.id}
-                dataKey={s.id}
-                name={s.name}
-                type="monotone"
-                stroke={colorFor(i)}
-                strokeWidth={2}
-                dot={false}
-                connectNulls
-              />
-            )
-          })}
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="h-[260px] lg:h-[320px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 4, right: 12, bottom: 4, left: -12 }}>
+            <CartesianGrid stroke={t.grid} strokeDasharray="3 3" />
+            <XAxis
+              dataKey="dateLabel"
+              axisLine={false}
+              tickLine={false}
+              tick={t.tick}
+              minTickGap={20}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={t.tick}
+              tickFormatter={(v: number) => `$${v.toFixed(2)}`}
+              domain={['dataMin - 0.05', 'dataMax + 0.05']}
+            />
+            <Tooltip
+              contentStyle={t.tooltipStyle}
+              labelStyle={t.tooltipText}
+              itemStyle={t.tooltipText}
+              formatter={(value: number) => `$${value.toFixed(3)}`}
+            />
+            {stations.map((s, i) => {
+              if (hidden.has(s.id)) return null
+              return (
+                <Line
+                  key={s.id}
+                  dataKey={s.id}
+                  name={s.name}
+                  type="monotone"
+                  stroke={colorFor(i)}
+                  strokeWidth={2}
+                  dot={false}
+                  connectNulls
+                />
+              )
+            })}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </>
   )
 }

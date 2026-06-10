@@ -1,6 +1,7 @@
 import { Navigation, TrendingDown } from 'lucide-react'
 import type { FuelType, Station } from '../types'
 import { getMeta } from '../data/stationMeta'
+import { directionsUrl } from '../utils/maps'
 import { formatPrice, latestPriceFor } from '../utils/prices'
 
 interface CheapestCardProps {
@@ -14,7 +15,7 @@ interface CheapestCardProps {
 export function CheapestCard({ station, fuel, isFavorite = false }: CheapestCardProps) {
   const price = latestPriceFor(station, fuel)
   const meta = getMeta(station.id)
-  const mapsUrl = `maps://?daddr=${encodeURIComponent(meta.mapsQuery)}`
+  const mapsUrl = directionsUrl(meta.mapsQuery)
 
   if (isFavorite) {
     return (
@@ -49,6 +50,8 @@ export function CheapestCard({ station, fuel, isFavorite = false }: CheapestCard
       </div>
       <a
         href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="p-2.5 -m-0.5 rounded-full text-ink-2 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10"
         aria-label="Directions"
       >

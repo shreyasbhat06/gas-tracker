@@ -1,6 +1,7 @@
 import { ChevronDown, MapPin, Navigation, Star } from 'lucide-react'
 import type { FuelType, Station } from '../types'
 import { getMeta } from '../data/stationMeta'
+import { directionsUrl } from '../utils/maps'
 import { formatPrice, latestPriceFor } from '../utils/prices'
 
 interface HeroCardProps {
@@ -13,7 +14,7 @@ interface HeroCardProps {
 export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
   const price = latestPriceFor(station, fuel)
   const meta = getMeta(station.id)
-  const mapsUrl = `maps://?daddr=${encodeURIComponent(meta.mapsQuery)}`
+  const mapsUrl = directionsUrl(meta.mapsQuery)
 
   return (
     // The hero stays dark in BOTH themes: it reads as a physical "car card"
@@ -71,6 +72,8 @@ export function HeroCard({ station, fuel, onChangeStation }: HeroCardProps) {
 
         <a
           href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 active:scale-[0.97] motion-reduce:transform-none transition text-sm font-medium text-white backdrop-blur-sm"
         >
           <Navigation className="w-4 h-4" />
