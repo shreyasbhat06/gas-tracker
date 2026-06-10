@@ -2,7 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   Design tokens — single source of truth for both themes.
+   Dark values match the original hardcoded palette exactly, so dark mode is
+   visually unchanged. Components consume these through Tailwind aliases
+   (bg-app, bg-surface, text-ink, border-line, …) defined in tailwind.config.
+--------------------------------------------------------------------------- */
 @layer base {
+  :root {
+    color-scheme: light;
+
+    --bg: #f2f2f7;
+    --surface: #ffffff;
+    --surface-2: #ededf1;
+    --border: rgba(0, 0, 0, 0.06);
+    --border-strong: #d4d4d9;
+    --text-1: #18181b;
+    --text-2: #52525b;
+    --text-3: #6b7280;
+
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --accent-press: #1e40af;
+
+    --seg-track: #e4e4ea;
+    --seg-thumb: #ffffff;
+
+    --chart-grid: #e3e3e8;
+    --chart-axis-text: #6b7280;
+    --chart-label: #18181b;
+    --chart-bar-neutral: #a1a1aa;
+    --chart-tooltip-bg: #ffffff;
+    --chart-tooltip-border: #e3e3e8;
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --bg: #0a0a0a;
+    --surface: #171717;
+    --surface-2: #262626;
+    --border: rgba(255, 255, 255, 0.04);
+    --border-strong: #404040;
+    --text-1: #f5f5f5;
+    --text-2: #a3a3a3;
+    --text-3: #737373;
+
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-press: #2563eb;
+
+    --seg-track: #171717;
+    --seg-thumb: #262626;
+
+    --chart-grid: #262626;
+    --chart-axis-text: #a3a3a3;
+    --chart-label: #e5e5e5;
+    --chart-bar-neutral: #525252;
+    --chart-tooltip-bg: #171717;
+    --chart-tooltip-border: #262626;
+  }
+
   html {
     font-family:
       -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto,
@@ -13,6 +73,15 @@
   }
   body {
     overscroll-behavior-y: none;
+    background-color: var(--bg);
+    color: var(--text-1);
+  }
+
+  /* Keyboard-only focus ring for buttons/links (inputs keep their border
+     treatment instead, so the two don't stack). */
+  :where(button, a, [role='switch']):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   /* iOS Safari renders date/time inputs with native chrome that ignores
@@ -57,6 +126,14 @@
   }
 }
 
+@layer components {
+  /* Standard raised surface. One recipe so radius/border/shadow can't drift
+     between cards. */
+  .card {
+    @apply rounded-2xl bg-surface border border-line;
+  }
+}
+
 @layer utilities {
   /* iOS-style bottom-sheet entrance */
   .animate-modal-sheet {
@@ -64,6 +141,12 @@
   }
   .animate-modal-backdrop {
     animation: modal-backdrop-enter 0.2s ease-out both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-modal-sheet,
+    .animate-modal-backdrop {
+      animation: none;
+    }
   }
 }
 
