@@ -7,8 +7,17 @@ import { useSyncExternalStore } from 'react'
 
 export type ThemePref = 'system' | 'light' | 'dark'
 export type ResolvedTheme = 'light' | 'dark'
+export type Skin = 'm' | 'rosso' | 'stealth'
+
+/** Picker metadata; swatch = gradient endpoints for the preview circle. */
+export const SKINS: { id: Skin; label: string; swatch: [string, string] }[] = [
+  { id: 'm', label: 'M Sport', swatch: ['#3b82f6', '#8b5cf6'] },
+  { id: 'rosso', label: 'Rosso', swatch: ['#dc2626', '#f59e0b'] },
+  { id: 'stealth', label: 'Stealth', swatch: ['#52525b', '#d4d4d8'] },
+]
 
 const KEY = 'gas-tracker-theme'
+const SKIN_KEY = 'gas-tracker-skin'
 // Must match --bg in index.css; mirrored in the index.html pre-paint script.
 const META_COLOR: Record<ResolvedTheme, string> = {
   dark: '#09090b',
@@ -19,6 +28,7 @@ const media = window.matchMedia('(prefers-color-scheme: dark)')
 const listeners = new Set<() => void>()
 
 let pref: ThemePref = readPref()
+let skin: Skin = readSkin()
 
 function readPref(): ThemePref {
   try {
@@ -26,6 +36,15 @@ function readPref(): ThemePref {
     return v === 'light' || v === 'dark' ? v : 'system'
   } catch {
     return 'system'
+  }
+}
+
+function readSkin(): Skin {
+  try {
+    const v = localStorage.getItem(SKIN_KEY)
+    return v === 'rosso' || v === 'stealth' ? v : 'm'
+  } catch {
+    return 'm'
   }
 }
 
@@ -54,6 +73,19 @@ export function setThemePref(next: ThemePref) {
   apply()
 }
 
+export function setSkin(next: Skin) {
+  skin = next
+  try {
+    if (next === 'm') localStorage.removeItem(SKIN_KEY)
+    else localStorage.setItem(SKIN_KEY, next)
+  } catch {
+    // Private mode etc.
+  }
+  if (next === 'm') delete document.documentElement.dataset.skin
+  else document.documentElement.dataset.skin = next
+  listeners.forEach((l) => l())
+}
+
 media.addEventListener('change', () => {
   if (pref === 'system') apply()
 })
@@ -65,10 +97,17 @@ function subscribe(cb: () => void) {
   }
 }
 
-/** Current preference + resolved mode; re-renders on toggle and on OS
- *  appearance changes (charts use `resolved` to re-read CSS variables). */
+/** Current preference, resolved mode, and skin; re-renders on any change
+ *  (charts key off `resolved` + `skin` to re-read CSS variables). */
 export function useTheme() {
   const prefValue = useSyncExternalStore(subscribe, () => pref)
   const resolvedValue = useSyncExternalStore(subscribe, resolved)
-  return { pref: prefValue, setPref: setThemePref, resolved: resolvedValue }
+  const skinValue = useSyncExternalStore(subscribe, () => skin)
+  return {
+    pref: prefValue,
+    setPref: setThemePref,
+    resolved: resolvedValue,
+    skin: skinValue,
+    setSkin,
+  }
 }

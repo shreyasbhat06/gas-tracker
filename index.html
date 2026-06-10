@@ -18,6 +18,9 @@
             (pref !== 'light' &&
               window.matchMedia('(prefers-color-scheme: dark)').matches)
           document.documentElement.classList.toggle('dark', dark)
+          var skin = localStorage.getItem('gas-tracker-skin')
+          if (skin === 'rosso' || skin === 'stealth')
+            document.documentElement.setAttribute('data-skin', skin)
           document
             .querySelector('meta[name="theme-color"]')
             .setAttribute('content', dark ? '#09090b' : '#f2f2f7')

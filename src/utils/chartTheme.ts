@@ -9,7 +9,7 @@ import { useTheme } from './theme'
 export type ChartTheme = ReturnType<typeof useChartTheme>
 
 export function useChartTheme() {
-  const { resolved } = useTheme()
+  const { resolved, skin } = useTheme()
   return useMemo(() => {
     const css = getComputedStyle(document.documentElement)
     const v = (name: string) => css.getPropertyValue(name).trim()
@@ -40,5 +40,7 @@ export function useChartTheme() {
       tooltipStyle,
       tooltipText: { color: v('--chart-label') },
     }
-  }, [resolved])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `skin` changes
+    // which computed values getComputedStyle returns.
+  }, [resolved, skin])
 }

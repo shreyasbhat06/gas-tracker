@@ -97,6 +97,66 @@
     --chart-tooltip-border: #27272a;
   }
 
+  /* -------------------------------------------------------------------------
+     Skins — accent personalities layered over light/dark. Each skin overrides
+     the SAME token set in a light block (:root[data-skin]) and a dark block
+     (:root.dark[data-skin]); the dark block's higher specificity guarantees
+     dark values win when both apply. Default skin (M Sport) = no attribute.
+  ------------------------------------------------------------------------- */
+
+  /* Rosso — racing red → amber. */
+  :root[data-skin='rosso'] {
+    --accent: #b91c1c;
+    --accent-hover: #991b1b;
+    --accent-press: #7f1d1d;
+    --accent-ink: #ffffff;
+    --hero-glow-1: rgba(220, 38, 38, 0.1);
+    --hero-glow-2: rgba(245, 158, 11, 0.12);
+    --hero-label: #b91c1c;
+    --hero-line-1: rgba(220, 38, 38, 0.5);
+    --hero-line-2: rgba(245, 158, 11, 0.55);
+    --chart-line-accent: #dc2626;
+  }
+  :root.dark[data-skin='rosso'] {
+    --accent: #dc2626;
+    --accent-hover: #ef4444;
+    --accent-press: #b91c1c;
+    --accent-ink: #ffffff;
+    --hero-glow-1: rgba(239, 68, 68, 0.2);
+    --hero-glow-2: rgba(245, 158, 11, 0.16);
+    --hero-label: rgba(252, 165, 165, 0.9);
+    --hero-line-1: rgba(248, 113, 113, 0.6);
+    --hero-line-2: rgba(251, 191, 36, 0.55);
+    --chart-line-accent: #f87171;
+  }
+
+  /* Stealth — monochrome graphite/silver; CTA inverts (black-on-white in
+     dark, white-on-black in light). */
+  :root[data-skin='stealth'] {
+    --accent: #18181b;
+    --accent-hover: #27272a;
+    --accent-press: #000000;
+    --accent-ink: #ffffff;
+    --hero-glow-1: rgba(24, 24, 27, 0.05);
+    --hero-glow-2: rgba(113, 113, 122, 0.07);
+    --hero-label: #3f3f46;
+    --hero-line-1: rgba(24, 24, 27, 0.35);
+    --hero-line-2: rgba(113, 113, 122, 0.4);
+    --chart-line-accent: #18181b;
+  }
+  :root.dark[data-skin='stealth'] {
+    --accent: #e4e4e7;
+    --accent-hover: #f4f4f5;
+    --accent-press: #d4d4d8;
+    --accent-ink: #09090b;
+    --hero-glow-1: rgba(244, 244, 245, 0.08);
+    --hero-glow-2: rgba(161, 161, 170, 0.1);
+    --hero-label: rgba(212, 212, 216, 0.9);
+    --hero-line-1: rgba(244, 244, 245, 0.35);
+    --hero-line-2: rgba(161, 161, 170, 0.35);
+    --chart-line-accent: #d4d4d8;
+  }
+
   html {
     font-family:
       -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto,
