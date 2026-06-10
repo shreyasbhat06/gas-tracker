@@ -252,7 +252,7 @@ export function LogFillUpModal({
         <button
           type="submit"
           disabled={!valid}
-          className="mt-5 w-full py-3 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none disabled:bg-surface-2 disabled:text-ink-3 disabled:active:scale-100 text-white font-semibold transition"
+          className="mt-5 w-full py-3 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none disabled:bg-surface-2 disabled:text-ink-3 disabled:active:scale-100 text-accent-ink font-semibold transition"
         >
           {isEdit ? 'Save changes' : 'Save'}
         </button>
@@ -330,9 +330,12 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (next: bool
     >
       <span
         className={
-          'absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ' +
+          'absolute top-0.5 left-0.5 w-5 h-5 rounded-full shadow transition-transform ' +
           (checked ? 'translate-x-5' : 'translate-x-0')
         }
+        // Knob = --accent-ink when on, so monochrome skins (near-white accent
+        // in dark) keep a visible knob; plain white when off.
+        style={{ background: checked ? 'var(--accent-ink)' : '#ffffff' }}
       />
     </button>
   )

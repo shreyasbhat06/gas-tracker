@@ -28,6 +28,7 @@ export default {
           DEFAULT: 'var(--accent)',
           hover: 'var(--accent-hover)',
           press: 'var(--accent-press)',
+          ink: 'var(--accent-ink)',
         },
         seg: {
           track: 'var(--seg-track)',

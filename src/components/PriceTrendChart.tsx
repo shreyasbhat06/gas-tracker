@@ -70,7 +70,7 @@ interface RangeChartProps {
 function RangeChart({ stations, favoriteId, data, t }: RangeChartProps) {
   const ids = stations.map((s) => s.id)
   const fav = stations.find((s) => s.id === favoriteId) ?? null
-  const favStroke = t.resolved === 'dark' ? '#60a5fa' : '#2563eb'
+  const favStroke = t.lineAccent
 
   const enriched = data.map((row) => {
     const prices = ids

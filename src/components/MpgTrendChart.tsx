@@ -30,7 +30,7 @@ export function MpgTrendChart({ entries }: { entries: FuelLogEntry[] }) {
     mpg: Number(p.mpg.toFixed(2)),
   }))
   const avg = data.reduce((a, b) => a + b.mpg, 0) / data.length
-  const stroke = t.resolved === 'dark' ? '#60a5fa' : '#2563eb'
+  const stroke = t.lineAccent
 
   return (
     <div className="card p-4">

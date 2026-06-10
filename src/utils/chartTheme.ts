@@ -32,6 +32,8 @@ export function useChartTheme() {
       label: v('--chart-label'),
       barNeutral: v('--chart-bar-neutral'),
       accent: v('--accent'),
+      /** Accent tuned for thin chart lines (brighter than --accent in dark). */
+      lineAccent: v('--chart-line-accent'),
       /** Page background — used as the "punch-out" ring around line dots. */
       bg: v('--bg'),
       tick: { fill: v('--chart-axis-text'), fontSize: 11 },

@@ -24,14 +24,33 @@
     --accent: #2563eb;
     --accent-hover: #1d4ed8;
     --accent-press: #1e40af;
+    /* Text/icon color placed ON the accent (CTA labels). Skins may invert it. */
+    --accent-ink: #ffffff;
+
+    /* Light mode expresses elevation with soft layered shadows, not borders. */
+    --shadow-card:
+      0 1px 2px rgba(16, 24, 40, 0.04),
+      0 4px 16px rgba(16, 24, 40, 0.06);
 
     --seg-track: #e4e4ea;
     --seg-thumb: #ffffff;
+
+    /* Hero card — the one branded surface. Skins override glows/label/line. */
+    --hero-bg: #ffffff;
+    --hero-glow-1: rgba(59, 130, 246, 0.1);
+    --hero-glow-2: rgba(139, 92, 246, 0.1);
+    --hero-label: #1d4ed8;
+    --hero-line-1: rgba(37, 99, 235, 0.5);
+    --hero-line-2: rgba(124, 58, 237, 0.5);
+    --hero-shadow:
+      0 1px 2px rgba(16, 24, 40, 0.05),
+      0 8px 24px rgba(16, 24, 40, 0.08);
 
     --chart-grid: #e3e3e8;
     --chart-axis-text: #6b7280;
     --chart-label: #18181b;
     --chart-bar-neutral: #a1a1aa;
+    --chart-line-accent: #2563eb;
     --chart-tooltip-bg: #ffffff;
     --chart-tooltip-border: #e3e3e8;
   }
@@ -39,28 +58,43 @@
   .dark {
     color-scheme: dark;
 
-    --bg: #0a0a0a;
-    --surface: #171717;
-    --surface-2: #262626;
-    --border: rgba(255, 255, 255, 0.04);
-    --border-strong: #404040;
-    --text-1: #f5f5f5;
-    --text-2: #a3a3a3;
-    --text-3: #737373;
+    /* Cool zinc ramp instead of pure neutrals — reads "instrument cluster",
+       not "generic dashboard". */
+    --bg: #09090b;
+    --surface: #18181b;
+    --surface-2: #27272a;
+    --border: rgba(255, 255, 255, 0.05);
+    --border-strong: #3f3f46;
+    --text-1: #f4f4f5;
+    --text-2: #a1a1aa;
+    --text-3: #7c7c86;
 
     --accent: #3b82f6;
     --accent-hover: #60a5fa;
     --accent-press: #2563eb;
+    --accent-ink: #ffffff;
 
-    --seg-track: #171717;
-    --seg-thumb: #262626;
+    /* Shadows are nearly invisible on near-black; borders carry elevation. */
+    --shadow-card: none;
 
-    --chart-grid: #262626;
-    --chart-axis-text: #a3a3a3;
-    --chart-label: #e5e5e5;
-    --chart-bar-neutral: #525252;
-    --chart-tooltip-bg: #171717;
-    --chart-tooltip-border: #262626;
+    --seg-track: #18181b;
+    --seg-thumb: #27272a;
+
+    --hero-bg: #18181b;
+    --hero-glow-1: rgba(59, 130, 246, 0.22);
+    --hero-glow-2: rgba(139, 92, 246, 0.22);
+    --hero-label: rgba(147, 197, 253, 0.9);
+    --hero-line-1: rgba(96, 165, 250, 0.6);
+    --hero-line-2: rgba(167, 139, 250, 0.6);
+    --hero-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+
+    --chart-grid: #27272a;
+    --chart-axis-text: #a1a1aa;
+    --chart-label: #e4e4e7;
+    --chart-bar-neutral: #52525b;
+    --chart-line-accent: #60a5fa;
+    --chart-tooltip-bg: #18181b;
+    --chart-tooltip-border: #27272a;
   }
 
   html {
@@ -131,6 +165,7 @@
      between cards. */
   .card {
     @apply rounded-2xl bg-surface border border-line;
+    box-shadow: var(--shadow-card);
   }
 }
 

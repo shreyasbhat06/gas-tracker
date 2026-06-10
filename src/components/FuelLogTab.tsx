@@ -92,7 +92,7 @@ export function FuelLogTab({ stations }: { stations: Station[] }) {
       <button
         type="button"
         onClick={openForCreate}
-        className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none text-white font-semibold shadow-lg shadow-accent/10 transition"
+        className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-accent hover:bg-accent-hover active:bg-accent-press active:scale-[0.98] motion-reduce:transform-none text-accent-ink font-semibold shadow-lg shadow-accent/10 transition"
       >
         <Plus className="w-5 h-5" />
         Log fill-up

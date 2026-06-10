@@ -11,7 +11,7 @@ export type ResolvedTheme = 'light' | 'dark'
 const KEY = 'gas-tracker-theme'
 // Must match --bg in index.css; mirrored in the index.html pre-paint script.
 const META_COLOR: Record<ResolvedTheme, string> = {
-  dark: '#0a0a0a',
+  dark: '#09090b',
   light: '#f2f2f7',
 }
 
