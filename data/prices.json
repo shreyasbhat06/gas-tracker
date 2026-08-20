@@ -6,11 +6,6 @@
       "source": "costco",
       "history": [
         {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.599,
-          "premium": 5.999
-        },
-        {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.599,
           "premium": 5.999
@@ -904,6 +899,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.299,
           "premium": 5.659
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.299,
+          "premium": 5.659
         }
       ]
     },
@@ -912,11 +912,6 @@
       "name": "Mission Valley",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.599,
-          "premium": 5.999
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.599,
@@ -1809,6 +1804,11 @@
         },
         {
           "timestamp": "2026-08-20T02:53:34+00:00",
+          "regular": 5.259,
+          "premium": 5.659
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
           "regular": 5.259,
           "premium": 5.659
         }
@@ -1820,11 +1820,6 @@
       "source": "costco",
       "history": [
         {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.639,
-          "premium": 5.939
-        },
-        {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.639,
           "premium": 5.939
@@ -2716,6 +2711,11 @@
         },
         {
           "timestamp": "2026-08-20T02:53:34+00:00",
+          "regular": 5.299,
+          "premium": 5.659
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
           "regular": 5.299,
           "premium": 5.659
         }
@@ -2727,11 +2727,6 @@
       "source": "costco",
       "history": [
         {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.599,
-          "premium": 5.999
-        },
-        {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.599,
           "premium": 5.999
@@ -3623,6 +3618,11 @@
         },
         {
           "timestamp": "2026-08-20T02:53:34+00:00",
+          "regular": 5.359,
+          "premium": 5.799
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
           "regular": 5.359,
           "premium": 5.799
         }
@@ -3634,11 +3634,6 @@
       "source": "costco",
       "history": [
         {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.599,
-          "premium": 5.899
-        },
-        {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.599,
           "premium": 5.899
@@ -4530,6 +4525,11 @@
         },
         {
           "timestamp": "2026-08-20T02:53:34+00:00",
+          "regular": 5.199,
+          "premium": 5.559
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
           "regular": 5.199,
           "premium": 5.559
         }
@@ -4541,11 +4541,6 @@
       "source": "costco",
       "history": [
         {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.639,
-          "premium": 5.939
-        },
-        {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.639,
           "premium": 5.939
@@ -5439,6 +5434,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.459,
           "premium": 5.759
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.459,
+          "premium": 5.759
         }
       ]
     },
@@ -5447,11 +5447,6 @@
       "name": "Santee",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.799,
-          "premium": 6.099
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.799,
@@ -6346,6 +6341,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.259,
           "premium": 5.559
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.259,
+          "premium": 5.559
         }
       ]
     },
@@ -6354,11 +6354,6 @@
       "name": "Rancho Del Rey",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.779,
-          "premium": 6.099
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.779,
@@ -7253,6 +7248,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.259,
           "premium": 5.659
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.259,
+          "premium": 5.659
         }
       ]
     },
@@ -7261,11 +7261,6 @@
       "name": "Chula Vista",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.799,
-          "premium": 6.099
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.799,
@@ -8160,6 +8155,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.259,
           "premium": 5.699
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.259,
+          "premium": 5.699
         }
       ]
     },
@@ -8168,11 +8168,6 @@
       "name": "San Marcos",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.659,
-          "premium": 6.059
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.659,
@@ -9067,6 +9062,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.159,
           "premium": 5.599
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.159,
+          "premium": 5.599
         }
       ]
     },
@@ -9075,11 +9075,6 @@
       "name": "Carlsbad",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.899,
-          "premium": 6.199
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.899,
@@ -9974,6 +9969,11 @@
           "timestamp": "2026-08-20T02:53:34+00:00",
           "regular": 5.499,
           "premium": 5.899
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
+          "regular": 5.499,
+          "premium": 5.899
         }
       ]
     },
@@ -9982,11 +9982,6 @@
       "name": "Vista",
       "source": "costco",
       "history": [
-        {
-          "timestamp": "2026-05-22T06:05:15+00:00",
-          "regular": 5.799,
-          "premium": 5.999
-        },
         {
           "timestamp": "2026-05-22T16:24:34+00:00",
           "regular": 5.799,
@@ -10879,6 +10874,11 @@
         },
         {
           "timestamp": "2026-08-20T02:53:34+00:00",
+          "regular": 5.399,
+          "premium": 5.699
+        },
+        {
+          "timestamp": "2026-08-20T14:32:50+00:00",
           "regular": 5.399,
           "premium": 5.699
         }
